@@ -25,7 +25,7 @@ public class Vote {
 
     private Integer value;
     private String comment;
-    private byte[] icon;
+    private String icon;
 
     @Override
     public boolean equals(Object o) {
