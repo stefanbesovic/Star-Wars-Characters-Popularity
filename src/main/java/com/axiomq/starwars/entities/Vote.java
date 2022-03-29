@@ -9,6 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import java.util.Arrays;
 import java.util.Objects;
 
 @Entity
@@ -37,5 +38,15 @@ public class Vote {
     @Override
     public int hashCode() {
         return Objects.hash(id, value);
+    }
+
+    @Override
+    public String toString() {
+        return "Vote{" +
+                "id=" + id +
+                ", value=" + value +
+                ", comment='" + comment + '\'' +
+                ", icon=" + Arrays.toString(icon) +
+                '}';
     }
 }
