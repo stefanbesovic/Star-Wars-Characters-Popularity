@@ -32,6 +32,7 @@ public class Character {
             joinColumns = @JoinColumn(name = "character_id"),
             inverseJoinColumns = @JoinColumn(name = "film_id")
     )
+
     private Set<Film> films = new HashSet<>();
     private Planet planet;
     private Integer votersCount;
