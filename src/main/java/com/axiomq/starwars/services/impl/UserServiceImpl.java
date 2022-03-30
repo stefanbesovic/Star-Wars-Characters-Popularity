@@ -49,4 +49,12 @@ public class UserServiceImpl implements UserService {
         User user = getUserById(id);
         userRepository.deleteById(user.getId());
     }
+
+    @Override
+    public User findByEmail(String email) {
+        return userRepository.findByEmail(email).orElseThrow( () ->
+                new NoSuchElementException(String.format("User with email %s does not exist.", email))
+        );
+    }
+
 }
