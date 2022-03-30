@@ -22,7 +22,7 @@ public class FilmController {
         return FilmMapper.INSTANCE.toDto(filmService.saveFilm(FilmMapper.INSTANCE.fromDto(filmDto)));
     }
 
-    @GetMapping("/all")
+    @GetMapping
     public List<FilmDto> getAllFilms() {
         return filmService.getAllFilms().stream()
                 .map(FilmMapper.INSTANCE::toDto)
