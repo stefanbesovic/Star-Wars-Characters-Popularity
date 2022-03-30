@@ -6,16 +6,14 @@ import com.axiomq.starwars.repositories.VoteRepository;
 import com.axiomq.starwars.services.VoteService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -23,13 +21,21 @@ import java.util.NoSuchElementException;
 @Service
 public class VoteServiceImpl implements VoteService {
     private final VoteRepository voteRepository;
-    private static String uploadDirectory = System.getProperty("user.dir") + "/src/main/resources/icons";
+    private static final String uploadDirectory = System.getProperty("user.dir") + "/src/main/resources/icons";
 
     @Override
     public Vote saveVote(Vote vote, MultipartFile file) throws IOException {
-        Path fullPath = Paths.get(uploadDirectory, file.getOriginalFilename());
-        Files.write(fullPath, file.getBytes());
+
+        Path fullPath = Paths.get(uploadDirectory, "id_" + vote.getId() + "_" + file.getOriginalFilename());
+        try(InputStream inputStream = file.getInputStream()) {
+            Files.copy(inputStream, fullPath, StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException e) {
+            throw new IOException(String.format("Can't upload file with name %s.", file.getOriginalFilename()));
+        }
+
         vote.setIcon(file.getOriginalFilename());
+        vote.setUrl(fullPath.toString());
+
         return voteRepository.save(vote);
     }
 

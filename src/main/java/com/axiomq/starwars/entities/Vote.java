@@ -26,6 +26,7 @@ public class Vote {
     private Integer value;
     private String comment;
     private String icon;
+    private String url;
 
     @Override
     public boolean equals(Object o) {
@@ -46,7 +47,8 @@ public class Vote {
                 "id=" + id +
                 ", value=" + value +
                 ", comment='" + comment + '\'' +
-                ", icon=" + Arrays.toString(icon) +
+                ", icon='" + icon + '\'' +
+                ", url='" + url + '\'' +
                 '}';
     }
 }

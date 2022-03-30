@@ -42,8 +42,6 @@ class FilmServiceImplTest {
 
         //then
         verify(filmRepository, times(1)).findById(film.getId());
-        assertNotNull(actual);
-        assertEquals(film.getName(), actual.getName());
     }
 
     @Test
