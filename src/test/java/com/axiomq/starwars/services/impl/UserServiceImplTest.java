@@ -45,11 +45,6 @@ class UserServiceImplTest {
 
         //then
         verify(userRepository, times(1)).findById(user.getId());
-        assertNotNull(actual);
-        assertEquals(user.getEmail(), actual.getEmail());
-        assertEquals(user.getUsername(), actual.getUsername());
-        assertEquals(user.getPassword(), actual.getPassword());
-        assertEquals(user.getRole(), actual.getRole());
     }
 
     @Test

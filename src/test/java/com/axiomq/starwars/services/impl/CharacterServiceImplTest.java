@@ -47,11 +47,6 @@ class CharacterServiceImplTest {
 
         //then
         verify(characterRepository, times(1)).findById(character.getId());
-        assertNotNull(actual);
-        assertEquals(character.getName(), actual.getName());
-        assertEquals(character.getGender(), actual.getGender());
-        assertEquals(character.getPlanet(), actual.getPlanet());
-        assertEquals(character.getVotersCount(), actual.getVotersCount());
     }
 
     @Test
