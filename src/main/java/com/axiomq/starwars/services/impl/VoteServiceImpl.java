@@ -16,25 +16,22 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 @Service
 public class VoteServiceImpl implements VoteService {
+
     private final VoteRepository voteRepository;
     private static final String uploadDirectory = System.getProperty("user.dir") + "/src/main/resources/icons";
 
     @Override
     public Vote saveVote(Vote vote, MultipartFile file) throws IOException {
 
-        Path fullPath = Paths.get(uploadDirectory, "id_" + vote.getId() + "_" + file.getOriginalFilename());
-        try(InputStream inputStream = file.getInputStream()) {
-            Files.copy(inputStream, fullPath, StandardCopyOption.REPLACE_EXISTING);
-        } catch (IOException e) {
-            throw new IOException(String.format("Can't upload file with name %s.", file.getOriginalFilename()));
-        }
+        Path path = saveFile(vote, file);
 
-        vote.setIcon(file.getOriginalFilename());
-        vote.setUrl(fullPath.toString());
+        vote.setIcon(path.getFileName().toString());
+        vote.setUrl(path.toString());
 
         return voteRepository.save(vote);
     }
@@ -51,11 +48,15 @@ public class VoteServiceImpl implements VoteService {
     }
 
     @Override
-    public Vote updateVote(Vote vote, Long id) {
+    public Vote updateVote(Vote vote, MultipartFile icon, Long id) throws IOException{
         Vote existing = getVoteById(id);
         existing.setComment(vote.getComment());
         existing.setValue(vote.getValue());
-        existing.setIcon(vote.getIcon()); //change this
+
+        Path path = saveFile(vote, icon);
+
+        existing.setIcon(path.getFileName().toString());
+        existing.setUrl(path.toString());
 
         return voteRepository.save(existing);
     }
@@ -64,5 +65,20 @@ public class VoteServiceImpl implements VoteService {
     public void deleteVote(Long id) {
         Vote vote = getVoteById(id);
         voteRepository.deleteById(vote.getId());
+    }
+
+    private Path saveFile(Vote vote, MultipartFile file) throws IOException {
+
+        String fileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
+        Path fullPath = Paths.get(uploadDirectory, fileName);
+
+        try(InputStream inputStream = file.getInputStream()) {
+
+            Files.copy(inputStream, fullPath, StandardCopyOption.REPLACE_EXISTING);
+            return fullPath;
+
+        } catch (IOException e) {
+            throw new IOException(String.format("Can't upload file with name %s.", file.getOriginalFilename()));
+        }
     }
 }

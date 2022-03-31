@@ -10,6 +10,6 @@ public interface VoteService {
     Vote saveVote(Vote vote, MultipartFile file) throws IOException;
     List<Vote> getAllVotes();
     Vote getVoteById(Long id);
-    Vote updateVote(Vote vote, Long id);
+    Vote updateVote(Vote vote, MultipartFile file, Long id) throws IOException;
     void deleteVote(Long id);
 }
