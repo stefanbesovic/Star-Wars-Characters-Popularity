@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.io.IOException;
+import java.security.Principal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -43,13 +44,15 @@ public class VoteController {
     @PutMapping("/{id}")
     public VoteResponse updateVote(@PathVariable("id") Long id,
                                    @RequestPart("icon") MultipartFile icon,
-                                   @Valid @RequestPart("request") VoteRequest voteRequest) throws IOException {
-        Vote vote = voteService.updateVote(VoteMapper.INSTANCE.fromReqDto(voteRequest), icon, id);
+                                   @Valid @RequestPart("request") VoteRequest voteRequest,
+                                   Principal principal) throws IOException {
+        Vote vote = voteService.updateVote(VoteMapper.INSTANCE.fromReqDto(voteRequest), icon, id, principal);
         return VoteMapper.INSTANCE.toResDto(vote);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteVote(@PathVariable("id") Long id) {
-        voteService.deleteVote(id);
+    public void deleteVote(@PathVariable("id") Long id,
+                           Principal principal) {
+        voteService.deleteVote(id, principal);
     }
 }

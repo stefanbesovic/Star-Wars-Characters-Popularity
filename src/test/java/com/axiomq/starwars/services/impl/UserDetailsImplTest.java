@@ -38,7 +38,7 @@ class UserDetailsImplTest {
         User user = User.builder()
                 .username("stefan")
                 .email("stefanbesovic@gmail.com")
-                .password("stefan123")
+                .password(passwordEncoder.encode("stefan123"))
                 .role(Role.USER)
                 .build();
 
