@@ -1,8 +1,10 @@
 package com.axiomq.starwars.services.impl;
 
+import com.axiomq.starwars.entities.Character;
 import com.axiomq.starwars.entities.Vote;
 import com.axiomq.starwars.enums.Role;
 import com.axiomq.starwars.repositories.VoteRepository;
+import com.axiomq.starwars.services.CharacterService;
 import com.axiomq.starwars.services.VoteService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,8 +16,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.security.Principal;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.UUID;
 
 @RequiredArgsConstructor
@@ -23,13 +27,17 @@ import java.util.UUID;
 public class VoteServiceImpl implements VoteService {
 
     private final VoteRepository voteRepository;
+    private final CharacterService characterService;
     private static final String uploadDirectory = System.getProperty("user.dir") + "/src/main/resources/icons";
 
     @Override
-    public Vote saveVote(Vote vote, MultipartFile file) throws IOException {
+    public Vote saveVote(Vote vote, MultipartFile file, Long characterId, Principal principal) throws IOException {
+
+        Character character = characterService.getCharacterById(characterId);
+        vote.setCharacter(character);
+        characterService.updateCharacterVotersCount(characterId, principal);
 
         Path path = saveFile(vote, file);
-
         vote.setIcon(path.getFileName().toString());
         vote.setUrl(path.toString());
 

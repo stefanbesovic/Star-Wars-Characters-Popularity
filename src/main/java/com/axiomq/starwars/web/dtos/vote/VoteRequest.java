@@ -21,4 +21,8 @@ public class VoteRequest {
 
     @Size(max = 120, message = "Comment can hold only 120 characters.")
     private String comment;
+
+    @NotNull
+    @Range(min = 1, message = "Character id must be a positive value.")
+    private Long characterId;
 }

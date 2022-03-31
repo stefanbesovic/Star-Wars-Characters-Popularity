@@ -40,6 +40,13 @@ public class Character {
     @OneToMany(mappedBy = "character")
     private Set<Vote> votes = new HashSet<>();
 
+    @ElementCollection
+    private Set<String> usersEmail;
+
+    public void addEmail(String email) { usersEmail.add(email); }
+
+    public void RemoveEmail(String email) { usersEmail.remove(email); }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
