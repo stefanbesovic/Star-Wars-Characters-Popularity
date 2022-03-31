@@ -5,10 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -27,6 +24,10 @@ public class Vote {
     private String comment;
     private String icon;
     private String url;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "character_id", referencedColumnName = "id")
+    private Character character;
 
     @Override
     public boolean equals(Object o) {

@@ -37,6 +37,9 @@ public class Character {
     private Planet planet;
     private Integer votersCount;
 
+    @OneToMany(mappedBy = "character")
+    private Set<Vote> votes = new HashSet<>();
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
