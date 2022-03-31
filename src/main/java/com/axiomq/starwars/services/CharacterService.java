@@ -10,4 +10,5 @@ public interface CharacterService {
     Character getCharacterById(Long id);
     Character updateCharacter(Character character, Long id);
     void deleteCharacter(Long id);
+    void populateCharacters();
 }
