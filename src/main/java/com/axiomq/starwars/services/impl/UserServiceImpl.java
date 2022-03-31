@@ -5,6 +5,7 @@ import com.axiomq.starwars.enums.Role;
 import com.axiomq.starwars.repositories.UserRepository;
 import com.axiomq.starwars.services.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,10 +16,12 @@ import java.util.NoSuchElementException;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public User saveUser(User user) {
         user.setRole(Role.USER);
+        user.setUsername(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
     }
 
