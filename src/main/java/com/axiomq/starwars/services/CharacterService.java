@@ -5,7 +5,6 @@ import com.axiomq.starwars.entities.Character;
 import java.util.List;
 
 public interface CharacterService {
-    Character saveCharacter(Character character);
     List<Character> getAllCharacters();
     Character getCharacterById(Long id);
     Character updateCharacter(Character character, Long id);

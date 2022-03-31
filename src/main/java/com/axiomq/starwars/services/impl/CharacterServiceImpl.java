@@ -11,6 +11,7 @@ import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 import org.springframework.stereotype.Service;
 
 import javax.sql.DataSource;
+import java.security.Principal;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -22,11 +23,6 @@ public class CharacterServiceImpl implements CharacterService {
 
     @Autowired
     private DataSource dataSource;
-
-    @Override
-    public Character saveCharacter(Character character) {
-        return characterRepository.save(character);
-    }
 
     @Override
     public List<Character> getAllCharacters() {
