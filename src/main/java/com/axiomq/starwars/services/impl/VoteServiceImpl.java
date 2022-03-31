@@ -14,6 +14,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.security.Principal;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
@@ -48,7 +49,7 @@ public class VoteServiceImpl implements VoteService {
     }
 
     @Override
-    public Vote updateVote(Vote vote, MultipartFile icon, Long id) throws IOException{
+    public Vote updateVote(Vote vote, MultipartFile icon, Long id, Principal principal) throws IOException{
         Vote existing = getVoteById(id);
         existing.setComment(vote.getComment());
         existing.setValue(vote.getValue());
@@ -62,7 +63,7 @@ public class VoteServiceImpl implements VoteService {
     }
 
     @Override
-    public void deleteVote(Long id) {
+    public void deleteVote(Long id, Principal principal) {
         Vote vote = getVoteById(id);
         voteRepository.deleteById(vote.getId());
     }

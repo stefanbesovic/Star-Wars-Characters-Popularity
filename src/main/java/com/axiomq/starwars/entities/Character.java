@@ -37,6 +37,16 @@ public class Character {
     private Planet planet;
     private Integer votersCount;
 
+    @OneToMany(mappedBy = "character", orphanRemoval = true)
+    private Set<Vote> votes = new HashSet<>();
+
+    @ElementCollection
+    private Set<String> usersEmail;
+
+    public void addEmail(String email) { usersEmail.add(email); }
+
+    public void removeEmail(String email) { usersEmail.remove(email); }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
