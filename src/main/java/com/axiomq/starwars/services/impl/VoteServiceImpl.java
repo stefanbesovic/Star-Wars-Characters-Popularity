@@ -1,8 +1,9 @@
 package com.axiomq.starwars.services.impl;
 
+import com.axiomq.starwars.entities.Character;
 import com.axiomq.starwars.entities.Vote;
-import com.axiomq.starwars.enums.Role;
 import com.axiomq.starwars.repositories.VoteRepository;
+import com.axiomq.starwars.services.CharacterService;
 import com.axiomq.starwars.services.VoteService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -25,15 +26,18 @@ public class VoteServiceImpl implements VoteService {
 
     private final VoteRepository voteRepository;
     private static final String uploadDirectory = System.getProperty("user.dir") + "/src/main/resources/icons";
+    private final CharacterService characterService;
 
     @Override
-    public Vote saveVote(Vote vote, MultipartFile file) throws IOException {
+    public Vote saveVote(Vote vote, MultipartFile file, Long characterId, Principal principal) throws IOException {
+
+        Character character = characterService.getCharacterById(characterId);
+        vote.setCharacter(character);
+        characterService.addCharacterVotersCount(characterId, principal);
 
         Path path = saveFile(vote, file);
-
         vote.setIcon(path.getFileName().toString());
         vote.setUrl(path.toString());
-
         return voteRepository.save(vote);
     }
 
@@ -53,18 +57,16 @@ public class VoteServiceImpl implements VoteService {
         Vote existing = getVoteById(id);
         existing.setComment(vote.getComment());
         existing.setValue(vote.getValue());
-
         Path path = saveFile(vote, icon);
-
         existing.setIcon(path.getFileName().toString());
         existing.setUrl(path.toString());
-
         return voteRepository.save(existing);
     }
 
     @Override
     public void deleteVote(Long id, Principal principal) {
         Vote vote = getVoteById(id);
+        characterService.removeCharacterVotersCount(vote.getCharacter().getId(), principal);
         voteRepository.deleteById(vote.getId());
     }
 

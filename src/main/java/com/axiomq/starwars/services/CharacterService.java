@@ -2,6 +2,7 @@ package com.axiomq.starwars.services;
 
 import com.axiomq.starwars.entities.Character;
 
+import java.security.Principal;
 import java.util.List;
 
 public interface CharacterService {
@@ -10,4 +11,8 @@ public interface CharacterService {
     Character updateCharacter(Character character, Long id);
     void deleteCharacter(Long id);
     void populateCharacters();
+
+    void addCharacterVotersCount(Long characterId, Principal principal);
+
+    void removeCharacterVotersCount(Long characterId, Principal principal);
 }

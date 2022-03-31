@@ -59,4 +59,20 @@ public class CharacterServiceImpl implements CharacterService {
         ResourceDatabasePopulator databasePopulator = new ResourceDatabasePopulator(resource);
         databasePopulator.execute(dataSource);
     }
+
+    @Override
+    public void addCharacterVotersCount(Long characterId, Principal principal) {
+        Character character = getCharacterById(characterId);
+        character.addEmail(principal.getName());
+        character.setVotersCount(character.getUsersEmail().size());
+        characterRepository.save(character);
+    }
+
+    @Override
+    public void removeCharacterVotersCount(Long characterId, Principal principal) {
+        Character character = getCharacterById(characterId);
+        character.removeEmail(principal.getName());
+        character.setVotersCount(character.getUsersEmail().size());
+        characterRepository.save(character);
+    }
 }
