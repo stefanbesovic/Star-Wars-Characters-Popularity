@@ -26,7 +26,7 @@ public class Vote {
     private String icon;
     private String url;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.REFRESH })
     @JoinColumn(name = "character_id", referencedColumnName = "id")
     private Character character;
 

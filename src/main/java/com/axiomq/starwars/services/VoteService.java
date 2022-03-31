@@ -11,6 +11,6 @@ public interface VoteService {
     Vote saveVote(Vote vote, MultipartFile file, Long characterId, Principal principal) throws IOException;
     List<Vote> getAllVotes();
     Vote getVoteById(Long id);
-    Vote updateVote(Vote vote, MultipartFile file, Long id) throws IOException;
-    void deleteVote(Long id);
+    Vote updateVote(Vote vote, MultipartFile file, Long id, Principal principal) throws IOException;
+    void deleteVote(Long id, Principal principal);
 }

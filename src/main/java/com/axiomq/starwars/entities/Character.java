@@ -37,7 +37,7 @@ public class Character {
     private Planet planet;
     private Integer votersCount;
 
-    @OneToMany(mappedBy = "character")
+    @OneToMany(mappedBy = "character", orphanRemoval = true)
     private Set<Vote> votes = new HashSet<>();
 
     @ElementCollection
@@ -45,7 +45,7 @@ public class Character {
 
     public void addEmail(String email) { usersEmail.add(email); }
 
-    public void RemoveEmail(String email) { usersEmail.remove(email); }
+    public void removeEmail(String email) { usersEmail.remove(email); }
 
     @Override
     public boolean equals(Object o) {
