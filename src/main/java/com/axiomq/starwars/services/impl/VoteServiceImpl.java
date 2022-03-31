@@ -28,10 +28,9 @@ public class VoteServiceImpl implements VoteService {
     @Override
     public Vote saveVote(Vote vote, MultipartFile file) throws IOException {
 
-        String fileName = saveFile(vote, file);
-        Path path = Paths.get(uploadDirectory + fileName);
+        Path path = saveFile(vote, file);
 
-        vote.setIcon(fileName);
+        vote.setIcon(path.getFileName().toString());
         vote.setUrl(path.toString());
 
         return voteRepository.save(vote);
@@ -54,10 +53,9 @@ public class VoteServiceImpl implements VoteService {
         existing.setComment(vote.getComment());
         existing.setValue(vote.getValue());
 
-        String fileName = saveFile(vote, icon);
-        Path path = Paths.get(uploadDirectory + fileName);
+        Path path = saveFile(vote, icon);
 
-        existing.setIcon(fileName);
+        existing.setIcon(path.getFileName().toString());
         existing.setUrl(path.toString());
 
         return voteRepository.save(existing);
@@ -69,7 +67,7 @@ public class VoteServiceImpl implements VoteService {
         voteRepository.deleteById(vote.getId());
     }
 
-    private String saveFile(Vote vote, MultipartFile file) throws IOException {
+    private Path saveFile(Vote vote, MultipartFile file) throws IOException {
 
         String fileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
         Path fullPath = Paths.get(uploadDirectory, fileName);
@@ -77,7 +75,7 @@ public class VoteServiceImpl implements VoteService {
         try(InputStream inputStream = file.getInputStream()) {
 
             Files.copy(inputStream, fullPath, StandardCopyOption.REPLACE_EXISTING);
-            return fileName;
+            return fullPath;
 
         } catch (IOException e) {
             throw new IOException(String.format("Can't upload file with name %s.", file.getOriginalFilename()));
