@@ -6,12 +6,14 @@ import com.axiomq.starwars.enums.Gender;
 import com.axiomq.starwars.enums.Planet;
 import com.axiomq.starwars.services.FilmService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
+@Service
 public class ConvertCharacter {
 
     private final FilmService filmService;
@@ -28,7 +30,7 @@ public class ConvertCharacter {
 
     public Gender convertGender(String gender) {
         if(gender.equals("n/a"))
-            return Gender.UNKNOWN;
+            return Gender.N_A;
         return Gender.valueOf(gender.toUpperCase());
     }
 
