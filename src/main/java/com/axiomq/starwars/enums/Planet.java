@@ -6,5 +6,6 @@ public enum Planet {
     YAVIN_IV,
     HOTH,
     DAGOBAH,
-    BESPIN
+    BESPIN,
+    SOME_OTHER_PLANET
 }
