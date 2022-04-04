@@ -2,27 +2,19 @@ package com.axiomq.starwars.services.impl;
 
 import com.axiomq.starwars.entities.Character;
 import com.axiomq.starwars.repositories.CharacterRepository;
+import com.axiomq.starwars.services.CharacterImportService;
 import com.axiomq.starwars.services.CharacterService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
-import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 import org.springframework.stereotype.Service;
 
-import javax.sql.DataSource;
-import java.security.Principal;
-import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.*;
 
 @RequiredArgsConstructor
 @Service
 public class CharacterServiceImpl implements CharacterService {
 
     private final CharacterRepository characterRepository;
-
-    @Autowired
-    private DataSource dataSource;
+    private final CharacterImportService characterImportService;
 
     @Override
     public List<Character> getAllCharacters() {
@@ -38,6 +30,7 @@ public class CharacterServiceImpl implements CharacterService {
     @Override
     public Character updateCharacter(Character character, Long id) {
         Character existing = getCharacterById(id);
+
         existing.setName(character.getName());
         existing.setFilms(character.getFilms());
         existing.setGender(character.getGender());
@@ -55,8 +48,8 @@ public class CharacterServiceImpl implements CharacterService {
 
     @Override
     public void populateCharacters() {
-        Resource resource = new ClassPathResource("characters.sql");
-        ResourceDatabasePopulator databasePopulator = new ResourceDatabasePopulator(resource);
-        databasePopulator.execute(dataSource);
+        Set<Character> characters = characterImportService.populateCharacters();
+        characterRepository.saveAll(characters);
     }
+
 }

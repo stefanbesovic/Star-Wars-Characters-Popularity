@@ -4,7 +4,10 @@ import com.axiomq.starwars.entities.Character;
 import com.axiomq.starwars.enums.Gender;
 import com.axiomq.starwars.enums.Planet;
 import com.axiomq.starwars.repositories.CharacterRepository;
+import com.axiomq.starwars.services.CharacterImportService;
 import com.axiomq.starwars.services.CharacterService;
+import com.axiomq.starwars.services.FilmService;
+import com.axiomq.starwars.web.dtos.character.ConvertCharacter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,11 +27,14 @@ class CharacterServiceImplTest {
     @Mock
     private CharacterRepository characterRepository;
 
+    @Mock
+    private CharacterImportService characterImportService;
+
     private CharacterService characterService;
 
     @BeforeEach
     void setUp() {
-        characterService = new CharacterServiceImpl(characterRepository);
+        characterService = new CharacterServiceImpl(characterRepository, characterImportService);
     }
 
     @Test
