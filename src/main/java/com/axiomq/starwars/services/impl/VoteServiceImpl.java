@@ -1,9 +1,11 @@
 package com.axiomq.starwars.services.impl;
 
 import com.axiomq.starwars.entities.Character;
+import com.axiomq.starwars.entities.User;
 import com.axiomq.starwars.entities.Vote;
 import com.axiomq.starwars.repositories.VoteRepository;
 import com.axiomq.starwars.services.CharacterService;
+import com.axiomq.starwars.services.UserService;
 import com.axiomq.starwars.services.VoteService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -27,18 +29,27 @@ public class VoteServiceImpl implements VoteService {
     private final VoteRepository voteRepository;
     private static final String uploadDirectory = System.getProperty("user.dir") + "/src/main/resources/icons";
     private final CharacterService characterService;
+    private final UserService userService;
 
     @Override
     public Vote saveVote(Vote vote, MultipartFile file, Long characterId, Principal principal) throws IOException {
 
+        User byEmail = userService.findByEmail(principal.getName());
+        vote.setUser(byEmail);
+
         Character character = characterService.getCharacterById(characterId);
         vote.setCharacter(character);
-        characterService.addCharacterVotersCount(characterId, principal);
 
         Path path = saveFile(vote, file);
         vote.setIcon(path.getFileName().toString());
         vote.setUrl(path.toString());
-        return voteRepository.save(vote);
+
+        Vote saved = voteRepository.save(vote);
+
+        character.setVotersCount(getDistinctUsers(characterId));
+        characterService.updateCharacter(character, characterId);
+
+        return saved;
     }
 
     @Override
@@ -55,19 +66,30 @@ public class VoteServiceImpl implements VoteService {
     @Override
     public Vote updateVote(Vote vote, MultipartFile icon, Long id, Principal principal) throws IOException{
         Vote existing = getVoteById(id);
+
         existing.setComment(vote.getComment());
         existing.setValue(vote.getValue());
         Path path = saveFile(vote, icon);
         existing.setIcon(path.getFileName().toString());
         existing.setUrl(path.toString());
+
         return voteRepository.save(existing);
     }
 
     @Override
     public void deleteVote(Long id, Principal principal) {
         Vote vote = getVoteById(id);
-        characterService.removeCharacterVotersCount(vote.getCharacter().getId(), principal);
+
+        Character character = vote.getCharacter();
         voteRepository.deleteById(vote.getId());
+
+        character.setVotersCount(getDistinctUsers(character.getId()));
+        characterService.updateCharacter(character, character.getId());
+    }
+
+    @Override
+    public Integer getDistinctUsers(Long characterId) {
+        return voteRepository.countDistinctUsers(characterId);
     }
 
     private Path saveFile(Vote vote, MultipartFile file) throws IOException {

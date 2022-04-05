@@ -13,4 +13,5 @@ public interface VoteService {
     Vote getVoteById(Long id);
     Vote updateVote(Vote vote, MultipartFile file, Long id, Principal principal) throws IOException;
     void deleteVote(Long id, Principal principal);
+    Integer getDistinctUsers(Long characterId);
 }

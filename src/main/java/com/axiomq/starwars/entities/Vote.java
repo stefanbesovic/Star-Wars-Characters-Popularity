@@ -28,6 +28,10 @@ public class Vote {
     @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.REFRESH })
     @JoinColumn(name = "character_id", referencedColumnName = "id")
     private Character character;
+    
+    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.REFRESH })
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private User user;
 
     @Override
     public boolean equals(Object o) {

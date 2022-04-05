@@ -36,14 +36,8 @@ public class Character {
     private Planet planet;
     private Integer votersCount;
 
-    @OneToMany(mappedBy = "character", orphanRemoval = true)
+    @OneToMany(mappedBy = "character", orphanRemoval = true, fetch = FetchType.LAZY)
     private Set<Vote> votes = new HashSet<>();
-
-    @ElementCollection
-    private Set<String> usersEmail;
-
-    public void addEmail(String email) { usersEmail.add(email); }
-    public void removeEmail(String email) { usersEmail.remove(email); }
 
     @Override
     public boolean equals(Object o) {

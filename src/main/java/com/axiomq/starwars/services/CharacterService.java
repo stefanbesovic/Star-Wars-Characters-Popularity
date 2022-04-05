@@ -11,8 +11,4 @@ public interface CharacterService {
     Character updateCharacter(Character character, Long id);
     void deleteCharacter(Long id);
     void populateCharacters();
-
-    void addCharacterVotersCount(Long characterId, Principal principal);
-
-    void removeCharacterVotersCount(Long characterId, Principal principal);
 }
