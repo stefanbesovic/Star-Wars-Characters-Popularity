@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -37,5 +38,6 @@ public class CharacterImportServiceImpl implements CharacterImportService {
         return response.getResults().stream()
                 .map(convertCharacter::toCharacter)
                 .collect(Collectors.toSet());
+
     }
 }

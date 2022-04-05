@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
+
 import java.util.*;
 
 @RequiredArgsConstructor
@@ -52,4 +53,5 @@ public class CharacterServiceImpl implements CharacterService {
         Set<Character> characters = characterImportService.populateCharacters();
         characterRepository.saveAll(characters);
     }
+
 }
