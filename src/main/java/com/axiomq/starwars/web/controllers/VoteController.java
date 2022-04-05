@@ -24,8 +24,9 @@ public class VoteController {
 
     @PostMapping
     public VoteResponse saveVote(@RequestPart("icon") MultipartFile icon,
-                                 @Valid @RequestPart("request") VoteRequest voteRequest) throws IOException {
-        Vote vote = voteService.saveVote(VoteMapper.INSTANCE.fromReqDto(voteRequest), icon);
+                                 @Valid @RequestPart("request") VoteRequest voteRequest,
+                                 Principal principal) throws IOException {
+        Vote vote = voteService.saveVote(VoteMapper.INSTANCE.fromReqDto(voteRequest), icon, voteRequest.getCharacterId(), principal);
         return VoteMapper.INSTANCE.toResDto(vote);
     }
 

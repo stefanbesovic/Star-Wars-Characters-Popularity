@@ -2,6 +2,7 @@ package com.axiomq.starwars.services;
 
 import com.axiomq.starwars.entities.Character;
 
+import java.security.Principal;
 import java.util.List;
 
 public interface CharacterService {

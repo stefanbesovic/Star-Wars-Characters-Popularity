@@ -7,6 +7,8 @@ import com.axiomq.starwars.services.CharacterService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.security.Principal;
+
 import java.util.*;
 
 @RequiredArgsConstructor

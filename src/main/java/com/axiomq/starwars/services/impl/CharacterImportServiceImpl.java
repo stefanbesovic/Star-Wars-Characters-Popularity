@@ -14,6 +14,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import java.util.stream.Collectors;
+
 @RequiredArgsConstructor
 @Service
 public class CharacterImportServiceImpl implements CharacterImportService {
@@ -33,12 +35,9 @@ public class CharacterImportServiceImpl implements CharacterImportService {
     }
 
     public Set<Character> extractCharacters(CharacterGet response) {
-        Set<Character> real = new HashSet<>();
+        return response.getResults().stream()
+                .map(convertCharacter::toCharacter)
+                .collect(Collectors.toSet());
 
-        List<CharacterResponse> characters = new ArrayList<>(response.getResults());
-        characters.forEach(characterResponse ->
-                real.add(convertCharacter.toCharacter(characterResponse)));
-
-        return real;
     }
 }
