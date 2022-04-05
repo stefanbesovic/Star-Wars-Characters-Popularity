@@ -8,6 +8,7 @@ import com.axiomq.starwars.services.CharacterService;
 import com.axiomq.starwars.services.UserService;
 import com.axiomq.starwars.services.VoteService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -67,8 +68,12 @@ public class VoteServiceImpl implements VoteService {
     public Vote updateVote(Vote vote, MultipartFile icon, Long id, Principal principal) throws IOException{
         Vote existing = getVoteById(id);
 
+        if(!existing.getUser().getEmail().equals(principal.getName()))
+            throw new AccessDeniedException("You are not authorized for this action.");
+
         existing.setComment(vote.getComment());
         existing.setValue(vote.getValue());
+
         Path path = saveFile(vote, icon);
         existing.setIcon(path.getFileName().toString());
         existing.setUrl(path.toString());
@@ -79,6 +84,8 @@ public class VoteServiceImpl implements VoteService {
     @Override
     public void deleteVote(Long id, Principal principal) {
         Vote vote = getVoteById(id);
+        if(!vote.getUser().getEmail().equals(principal.getName()))
+            throw new AccessDeniedException("You are not authorized for this action.");
 
         Character character = vote.getCharacter();
         voteRepository.deleteById(vote.getId());

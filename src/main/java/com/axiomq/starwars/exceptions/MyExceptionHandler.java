@@ -1,6 +1,7 @@
 package com.axiomq.starwars.exceptions;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -10,10 +11,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import javax.servlet.http.HttpServletRequest;
 import java.sql.Timestamp;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.NoSuchElementException;
+import java.util.*;
 
 @RestControllerAdvice
 public class MyExceptionHandler {
@@ -21,14 +19,26 @@ public class MyExceptionHandler {
     @ExceptionHandler(NoSuchElementException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorDetails NoSuchElementHandler(NoSuchElementException exception,
-                                                       HttpServletRequest request) {
-        ErrorDetails error = ErrorDetails.builder()
+                                             HttpServletRequest request) {
+
+        return ErrorDetails.builder()
                 .path(request.getServletPath())
                 .timestamp(new Timestamp(new Date().getTime()))
                 .message(exception.getMessage())
                 .build();
+    }
 
-        return error;
+    @ExceptionHandler(AccessDeniedException.class)
+    @ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
+    public ErrorDetails NoSuchElementHandler(AccessDeniedException exception,
+                                             HttpServletRequest request) {
+
+        return ErrorDetails.builder()
+                .path(request.getServletPath())
+                .timestamp(new Timestamp(new Date().getTime()))
+                .message(exception.getMessage())
+                .validationErorr(Collections.singletonMap("method", "Method is not allowed."))
+                .build();
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -38,6 +48,7 @@ public class MyExceptionHandler {
         ErrorDetails error = ErrorDetails.builder()
                 .path(request.getServletPath())
                 .timestamp(new Timestamp(new Date().getTime()))
+                .message("Validation Error")
                 .build();
 
         BindingResult bindingResult = exception.getBindingResult();
