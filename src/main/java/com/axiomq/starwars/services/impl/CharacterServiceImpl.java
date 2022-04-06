@@ -1,13 +1,12 @@
 package com.axiomq.starwars.services.impl;
 
 import com.axiomq.starwars.entities.Character;
+import com.axiomq.starwars.exceptions.ObjectNotFoundException;
 import com.axiomq.starwars.repositories.CharacterRepository;
 import com.axiomq.starwars.services.CharacterImportService;
 import com.axiomq.starwars.services.CharacterService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.security.Principal;
 
 import java.util.*;
 
@@ -26,7 +25,7 @@ public class CharacterServiceImpl implements CharacterService {
     @Override
     public Character getCharacterById(Long id) {
         return characterRepository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException(String.format("Character not found: %d", id)));
+                .orElseThrow(() -> new ObjectNotFoundException(String.format("Character not found: %d", id)));
     }
 
     @Override

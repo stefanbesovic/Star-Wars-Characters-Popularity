@@ -1,14 +1,13 @@
 package com.axiomq.starwars.services.impl;
 
 import com.axiomq.starwars.entities.Film;
+import com.axiomq.starwars.exceptions.ObjectNotFoundException;
 import com.axiomq.starwars.repositories.FilmRepository;
 import com.axiomq.starwars.services.FilmService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.NoSuchElementException;
-
 @RequiredArgsConstructor
 @Service
 public class FilmServiceImpl implements FilmService {
@@ -28,7 +27,7 @@ public class FilmServiceImpl implements FilmService {
     @Override
     public Film getFilmById(Long id) {
         return filmRepository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException(String.format("Film not found: %d", id)));
+                .orElseThrow(() -> new ObjectNotFoundException(String.format("Film not found: %d", id)));
     }
 
     @Override

@@ -16,9 +16,9 @@ import java.util.*;
 @RestControllerAdvice
 public class MyExceptionHandler {
 
-    @ExceptionHandler(NoSuchElementException.class)
+    @ExceptionHandler(ObjectNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ErrorDetails NoSuchElementHandler(NoSuchElementException exception,
+    public ErrorDetails ObjectNotFoundHandler(ObjectNotFoundException exception,
                                              HttpServletRequest request) {
 
         return ErrorDetails.builder()
@@ -28,9 +28,9 @@ public class MyExceptionHandler {
                 .build();
     }
 
-    @ExceptionHandler(AccessDeniedException.class)
-    @ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
-    public ErrorDetails NoSuchElementHandler(AccessDeniedException exception,
+    @ExceptionHandler(NotAuthorizedException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorDetails NoSuchElementHandler(NotAuthorizedException exception,
                                              HttpServletRequest request) {
 
         return ErrorDetails.builder()

@@ -3,12 +3,12 @@ package com.axiomq.starwars.services.impl;
 import com.axiomq.starwars.entities.Character;
 import com.axiomq.starwars.entities.User;
 import com.axiomq.starwars.entities.Vote;
+import com.axiomq.starwars.exceptions.ObjectNotFoundException;
 import com.axiomq.starwars.repositories.VoteRepository;
 import com.axiomq.starwars.services.CharacterService;
 import com.axiomq.starwars.services.UserService;
 import com.axiomq.starwars.services.VoteService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -20,7 +20,6 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.security.Principal;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.UUID;
 
 @RequiredArgsConstructor
@@ -61,7 +60,7 @@ public class VoteServiceImpl implements VoteService {
     @Override
     public Vote getVoteById(Long id) {
         return voteRepository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException(String.format("Vote not found: %d", id)));
+                .orElseThrow(() -> new ObjectNotFoundException(String.format("Vote not found: %d", id)));
     }
 
     @Override
@@ -69,7 +68,7 @@ public class VoteServiceImpl implements VoteService {
         Vote existing = getVoteById(id);
 
         if(!existing.getUser().getEmail().equals(principal.getName()))
-            throw new AccessDeniedException("You are not authorized for this action.");
+            throw new ObjectNotFoundException("You are not authorized for this action.");
 
         existing.setComment(vote.getComment());
         existing.setValue(vote.getValue());
@@ -85,7 +84,7 @@ public class VoteServiceImpl implements VoteService {
     public void deleteVote(Long id, Principal principal) {
         Vote vote = getVoteById(id);
         if(!vote.getUser().getEmail().equals(principal.getName()))
-            throw new AccessDeniedException("You are not authorized for this action.");
+            throw new ObjectNotFoundException("You are not authorized for this action.");
 
         Character character = vote.getCharacter();
         voteRepository.deleteById(vote.getId());

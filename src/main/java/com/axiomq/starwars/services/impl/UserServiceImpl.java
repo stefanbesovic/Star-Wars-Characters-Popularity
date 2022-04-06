@@ -2,6 +2,7 @@ package com.axiomq.starwars.services.impl;
 
 import com.axiomq.starwars.entities.User;
 import com.axiomq.starwars.enums.Role;
+import com.axiomq.starwars.exceptions.ObjectNotFoundException;
 import com.axiomq.starwars.repositories.UserRepository;
 import com.axiomq.starwars.services.UserService;
 import lombok.RequiredArgsConstructor;
@@ -9,7 +10,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 
 @RequiredArgsConstructor
 @Service
@@ -33,7 +33,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getUserById(Long id) {
         return userRepository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException(String.format("User not found: %d", id)));
+                .orElseThrow(() -> new ObjectNotFoundException(String.format("User not found: %d", id)));
     }
 
     @Override
@@ -56,7 +56,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User findByEmail(String email) {
         return userRepository.findByEmail(email).orElseThrow( () ->
-                new NoSuchElementException(String.format("User with email %s does not exist.", email))
+                new ObjectNotFoundException(String.format("User with email %s does not exist.", email))
         );
     }
 
