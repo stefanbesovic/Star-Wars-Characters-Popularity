@@ -2,10 +2,7 @@ package com.axiomq.starwars.entities;
 
 import com.axiomq.starwars.enums.Gender;
 import com.axiomq.starwars.enums.Planet;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -13,7 +10,8 @@ import java.util.Objects;
 import java.util.Set;
 
 @Entity
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -59,7 +57,6 @@ public class Character {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", gender=" + gender +
-                ", films=" + films +
                 ", planet=" + planet +
                 ", votersCount=" + votersCount +
                 '}';
