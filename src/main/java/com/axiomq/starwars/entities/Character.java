@@ -17,6 +17,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+//@Table(name = "_character")
 public class Character {
 
     @Id

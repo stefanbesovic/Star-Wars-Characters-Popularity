@@ -1,5 +1,6 @@
 package com.axiomq.starwars.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -23,6 +24,7 @@ public class Film {
 
     private String name;
 
+    @JsonIgnore
     @ManyToMany(mappedBy = "films", fetch = FetchType.LAZY)
     private Set<Character> characters = new HashSet<>();
 
