@@ -1,5 +1,6 @@
 package com.axiomq.starwars.web.dtos.character;
 
+import com.axiomq.starwars.config.AppProperties;
 import com.axiomq.starwars.entities.Film;
 import com.axiomq.starwars.enums.Gender;
 import com.axiomq.starwars.enums.Planet;
@@ -8,36 +9,54 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import static com.axiomq.starwars.enums.Planet.SOME_OTHER_PLANET;
 import static com.axiomq.starwars.enums.Planet.TATOOINE;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
 
-@ExtendWith(MockitoExtension.class)
+@ExtendWith({SpringExtension.class, MockitoExtension.class})
+@EnableConfigurationProperties(value = AppProperties.class)
+@TestPropertySource("classpath:application.properties")
 class ConvertCharacterTest {
 
     @Mock
     private FilmService filmService;
 
-    private ConvertCharacter convertCharacter;
+    @Autowired
+    private AppProperties appProperties;
+
+    private CharacterConverter characterConverter;
+
+    private final List<Film> films = new ArrayList<>();
 
     @BeforeEach
     void setUp() {
-        convertCharacter = new ConvertCharacter(filmService);
+        characterConverter = new CharacterConverter(filmService, appProperties);
+        films.add(Film.builder().id(1L).name("aa").build());
+        films.add(Film.builder().id(2L).name("bb").build());
+        films.add(Film.builder().id(3L).name("cc").build());
+        films.add(Film.builder().id(4L).name("dd").build());
+        films.add(Film.builder().id(5L).name("ee").build());
+        films.add(Film.builder().id(6L).name("gg").build());
     }
 
     @Test
     void givenHomeworld_whenConvertGender_returnPlanet() {
         //given
-        String homewolrd = "https://swapi.dev/api/planets/1/";
+        String prefix = appProperties.getPlanets();
+        String homewolrd = prefix + "1/";
 
         //when
-        Planet planet = convertCharacter.convertHomeworld(homewolrd);
+        Planet planet = characterConverter.convertHomeworld(homewolrd);
 
         //then
         assertNotNull(planet);
@@ -51,7 +70,7 @@ class ConvertCharacterTest {
 
         //when
         Exception e = assertThrows(IllegalArgumentException.class,
-                () -> convertCharacter.convertHomeworld(homewolrd)
+                () -> characterConverter.convertHomeworld(homewolrd)
         );
 
         //then
@@ -61,10 +80,11 @@ class ConvertCharacterTest {
     @Test
     void givenHomeworldGreaterThanSix_whenConvertGender_returnSomeOtherPlanet() {
         //given
-        String homewolrd = "https://swapi.dev/api/planets/7/";
+        String prefix = appProperties.getPlanets();
+        String homewolrd = prefix + "7/";
 
         //when
-        Planet planet = convertCharacter.convertHomeworld(homewolrd);
+        Planet planet = characterConverter.convertHomeworld(homewolrd);
 
         //then
         assertNotNull(planet);
@@ -74,16 +94,20 @@ class ConvertCharacterTest {
     @Test
     void givenStringSet_whenConvertFilm_returnOk() {
         //given
-        String film1 = "https://swapi.dev/api/films/1/";
-        String film2 = "https://swapi.dev/api/films/2/";
+        String prefix = appProperties.getFilms();
+        String film1 = prefix + "1/";
+        String film2 = prefix + "2/";
 
         Set<String> filmStrings = Set.of(film1, film2);
 
         //when
-        convertCharacter.convertFilm(filmStrings);
+        Set<Film> film = characterConverter.convertFilm(filmStrings, films);
 
         //then
-        Mockito.verify(filmService, Mockito.times(filmStrings.size())).getFilmById(any());
+        assertNotNull(film);
+        assertFalse(film.isEmpty());
+        assertEquals(2, film.size());
+        assertEquals("aa", film.iterator().next().getName());
     }
 
     @Test
@@ -93,7 +117,7 @@ class ConvertCharacterTest {
 
         //when
         Exception e = assertThrows(IllegalArgumentException.class,
-                () -> convertCharacter.convertFilm(filmStrings));
+                () -> characterConverter.convertFilm(filmStrings, films));
 
         //then
         assertTrue(e.getMessage().contains("Films are null."));
@@ -102,11 +126,11 @@ class ConvertCharacterTest {
     @Test
     void givenGoodFormat_whenGetPlainNumber_thenReturnInteger() {
         //given
-        String prefix = "https://swapi.dev/api/planets/";
-        String name = "https://swapi.dev/api/planets/1/";
+        String prefix = appProperties.getPlanets();
+        String name = prefix + "1/";
 
         //when
-        Integer number = convertCharacter.getPlainNumber(prefix, name);
+        Integer number = characterConverter.getPlainNumber(prefix, name);
 
         //then
         assertNotNull(number);
@@ -116,28 +140,14 @@ class ConvertCharacterTest {
     @Test
     void givenBadStringFormat_whenGetPlainNumber_thenThrowNumberFormatException() {
         //given
-        String prefix = "https://swapi.dev/api/planets/";
-        String name = "https://swapi.dev/api/planets/s/";
+        String prefix = appProperties.getPlanets();
+        String name = prefix + "s/";
 
         //when
         //then
         Exception e = assertThrows(NumberFormatException.class,
-                () -> convertCharacter.getPlainNumber(prefix, name));
+                () -> characterConverter.getPlainNumber(prefix, name));
 
-    }
-
-    @Test
-    void givenBadNegativeNumberFormat_whenGetPlainNumber_thenThrowNumberFormatException() {
-        //given
-        String prefix = "https://swapi.dev/api/planets/";
-        String name = "https://swapi.dev/api/planets/-1/";
-
-        //when
-        //then
-        Exception e = assertThrows(IllegalArgumentException.class,
-                () -> convertCharacter.getPlainNumber(prefix, name));
-
-        assertTrue(e.getMessage().contains("Number has negative value!"));
     }
 
     @Test
@@ -146,7 +156,7 @@ class ConvertCharacterTest {
         String genderString = "male";
 
         //when
-        Gender gender = convertCharacter.convertGender(genderString);
+        Gender gender = characterConverter.convertGender(genderString);
 
         //then
         assertNotNull(gender);
@@ -159,7 +169,7 @@ class ConvertCharacterTest {
         String genderString = "n/a";
 
         //when
-        Gender gender = convertCharacter.convertGender(genderString);
+        Gender gender = characterConverter.convertGender(genderString);
 
         //then
         assertNotNull(gender);
@@ -173,7 +183,7 @@ class ConvertCharacterTest {
 
         //when
         Exception e = assertThrows(IllegalArgumentException.class,
-                () -> convertCharacter.convertGender(genderString));
+                () -> characterConverter.convertGender(genderString));
 
         //then
         assertTrue(e.getMessage().contains("Gender is null."));
@@ -187,7 +197,7 @@ class ConvertCharacterTest {
         //when
         //then
         Exception e = assertThrows(IllegalArgumentException.class,
-                () -> convertCharacter.convertGender(genderString));
+                () -> characterConverter.convertGender(genderString));
 
     }
 }

@@ -1,5 +1,6 @@
 package com.axiomq.starwars.web.dtos.character;
 
+import com.axiomq.starwars.config.AppProperties;
 import com.axiomq.starwars.entities.Character;
 import com.axiomq.starwars.entities.Film;
 import com.axiomq.starwars.enums.Gender;
@@ -10,21 +11,23 @@ import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
-public class ConvertCharacter {
+public class CharacterConverter {
 
     private final FilmService filmService;
+    private final AppProperties appProperties;
 
-    public Character toCharacter(CharacterResponse characterResponse) {
+    public Character toCharacter(CharacterResponse characterResponse, List<Film> films) {
         return Character.builder()
                 .name(characterResponse.getName())
                 .planet(convertHomeworld(characterResponse.getHomeworld()))
                 .gender(convertGender(characterResponse.getGender()))
-                .films(convertFilm(characterResponse.getFilms()))
+                .films(convertFilm(characterResponse.getFilms(), films))
                 .votersCount(0)
                 .build();
     }
@@ -42,7 +45,7 @@ public class ConvertCharacter {
         if(homeworld == null)
             throw new IllegalArgumentException("Homeworld is null.");
 
-        String prefix = "https://swapi.dev/api/planets/";
+        String prefix = appProperties.getPlanets();
 
         int planet = getPlainNumber(prefix, homeworld) - 1;
 
@@ -52,17 +55,17 @@ public class ConvertCharacter {
         return Planet.values()[planet];
     }
 
-    public Set<Film> convertFilm(Set<String> films) {
+    public Set<Film> convertFilm(Set<String> films, List<Film> existingFilms) {
         if(films == null)
             throw new IllegalArgumentException("Films are null.");
 
-        String prefix = "https://swapi.dev/api/films/";
+        String prefix = appProperties.getFilms();
         Set<Long> filmIds = films.stream()
                 .map(film -> Long.valueOf(getPlainNumber(prefix, film)))
                 .collect(Collectors.toSet());
 
         return filmIds.stream()
-                .map(filmService::getFilmById)
+                .map(id -> existingFilms.get((int)(id - 1)))
                 .collect(Collectors.toSet());
     }
 
@@ -70,10 +73,11 @@ public class ConvertCharacter {
         String numberAsString = name.substring(0, name.length() - 1);
         numberAsString = numberAsString.substring(prefix.length());
 
-        int number = Integer.parseInt(numberAsString);
-        if(number <= 0)
-            throw new IllegalArgumentException("Number has negative value!");
+        try {
+            return Integer.parseInt(numberAsString);
 
-        return  number;
+        } catch (NumberFormatException e) {
+            throw new NumberFormatException("Invalid number format");
+        }
     }
 }

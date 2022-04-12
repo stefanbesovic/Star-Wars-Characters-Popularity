@@ -1,11 +1,16 @@
 package com.axiomq.starwars.web.dtos.character;
 
-import com.axiomq.starwars.entities.Character;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class CharacterGet {
     private String next;
     private List<CharacterResponse> results;
