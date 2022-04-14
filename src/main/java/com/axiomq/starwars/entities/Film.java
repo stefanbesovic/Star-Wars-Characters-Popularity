@@ -1,9 +1,6 @@
 package com.axiomq.starwars.entities;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -11,7 +8,8 @@ import java.util.Objects;
 import java.util.Set;
 
 @Entity
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -23,6 +21,7 @@ public class Film {
 
     private String name;
 
+    @JsonIgnore
     @ManyToMany(mappedBy = "films", fetch = FetchType.LAZY)
     private Set<Character> characters = new HashSet<>();
 
@@ -44,7 +43,6 @@ public class Film {
         return "Film{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", characters=" + characters +
                 '}';
     }
 }

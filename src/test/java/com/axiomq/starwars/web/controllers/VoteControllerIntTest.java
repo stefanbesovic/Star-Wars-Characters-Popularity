@@ -16,7 +16,6 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.FileInputStream;
 import java.io.InputStream;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -34,6 +33,8 @@ class VoteControllerIntTest {
 
     @Autowired
     private MockMvc mockMvc;
+
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     private static String TOKEN;
 
@@ -57,7 +58,6 @@ class VoteControllerIntTest {
                 .characterId(1L)
                 .build();
 
-        ObjectMapper objectMapper = new ObjectMapper();
         String voteJson = objectMapper.writeValueAsString(v);
 
         InputStream inputstream = getClass().getClassLoader().getResourceAsStream("icons/angry.png");

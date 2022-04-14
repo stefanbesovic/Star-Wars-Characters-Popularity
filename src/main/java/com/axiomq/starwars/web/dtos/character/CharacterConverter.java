@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
-public class ConvertCharacter {
+public class CharacterConverter {
 
     private final FilmService filmService;
 
