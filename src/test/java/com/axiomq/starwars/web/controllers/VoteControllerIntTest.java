@@ -2,6 +2,7 @@ package com.axiomq.starwars.web.controllers;
 
 import com.axiomq.starwars.web.dtos.vote.VoteRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -11,6 +12,7 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,6 +20,7 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -32,7 +35,18 @@ class VoteControllerIntTest {
     @Autowired
     private MockMvc mockMvc;
 
-    private final static String TOKEN = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzdGVmYW5iZXNvdmljQGdtYWlsLmNvbSIsImF1dGhvcml0aWVzIjpbeyJhdXRob3JpdHkiOiJBRE1JTiJ9XSwiaWF0IjoxNjQ5MTQ3NTQ1LCJleHAiOjE2NDk5NzM2MDB9.jv2nvSsPe6r_SuinLuXkarpq-o38ihtyRXGKEDCyHbs";
+    private static String TOKEN;
+
+    @BeforeEach
+    void setUp() throws Exception {
+        MvcResult result = mockMvc.perform(post("/login")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"email\":\"stefanbesovic@gmail.com\",\"password\":\"bass\"}"))
+                .andDo(print())
+                .andReturn();
+        String content = result.getResponse().getHeader("Authorization");
+        TOKEN = content.substring("Bearer ".length(), content.length());
+    }
 
     @Test
     void givenVote_whenSaveVote_thenReturnOk() throws Exception {
@@ -46,7 +60,7 @@ class VoteControllerIntTest {
         ObjectMapper objectMapper = new ObjectMapper();
         String voteJson = objectMapper.writeValueAsString(v);
 
-        InputStream inputstream = new FileInputStream("/home/stefan/Downloads/angry.png");
+        InputStream inputstream = getClass().getClassLoader().getResourceAsStream("icons/angry.png");
         MockMultipartFile icon = new MockMultipartFile("icon", "angry.png", MediaType.MULTIPART_FORM_DATA_VALUE, inputstream);
         MockMultipartFile json = new MockMultipartFile("request", "", MediaType.APPLICATION_JSON_VALUE, voteJson.getBytes());
 
