@@ -9,7 +9,6 @@ import com.axiomq.starwars.web.dtos.character.CharacterGet;
 import com.axiomq.starwars.web.dtos.character.CharacterConverter;
 import com.axiomq.starwars.web.dtos.character.CharacterResponse;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
@@ -34,13 +33,18 @@ public class CharacterImportServiceImpl implements CharacterImportService {
     public Set<Character> populateCharacters() {
         String url = appProperties.getUrl();
         List<Film> films = filmService.getAllFilms();
+
+        Set<Character> characters = new HashSet<>();
         try {
-            CharacterGet response = restTemplate.getForObject(url, CharacterGet.class);
-            return extractCharacters(response, films);
+            while(url != null) {
+                CharacterGet response = restTemplate.getForObject(url, CharacterGet.class);
+                characters.addAll(extractCharacters(response,films));
+                url = response.getNext();
+            }
+            return characters;
         } catch (HttpClientErrorException e) {
             throw new HttpClientErrorException(HttpStatus.NOT_FOUND);
         }
-
     }
 
     public Set<Character> extractCharacters(CharacterGet response, List<Film> films) {

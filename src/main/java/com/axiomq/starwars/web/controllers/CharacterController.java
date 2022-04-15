@@ -25,8 +25,4 @@ public class CharacterController {
         characterService.deleteCharacter(id);
     }
 
-    @PostMapping("/script")
-    public void populateCharacters() {
-        characterService.populateCharacters();
-    }
 }

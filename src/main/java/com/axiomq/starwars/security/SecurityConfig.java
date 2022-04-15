@@ -46,7 +46,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/logout").permitAll()
 
                 .antMatchers("/api/**").hasAnyAuthority(Role.USER.name(), Role.ADMIN.name())
-                .antMatchers("/api/character/script").hasAnyAuthority(Role.ADMIN.name())
+                .antMatchers("/admin/**").hasAnyAuthority(Role.ADMIN.name())
                 .antMatchers(HttpMethod.DELETE, "/api/character/**").hasAnyAuthority(Role.ADMIN.name())
 
                 .anyRequest()
