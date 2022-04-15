@@ -51,7 +51,8 @@ public class Vote {
                 ", value=" + value +
                 ", comment='" + comment + '\'' +
                 ", icon='" + icon + '\'' +
-                ", url='" + url + '\'' +
+                ", character=" + character +
+                ", user=" + user +
                 '}';
     }
 }

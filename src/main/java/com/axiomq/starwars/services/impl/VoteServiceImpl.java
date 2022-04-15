@@ -95,7 +95,7 @@ public class VoteServiceImpl implements VoteService {
 
     @Override
     public Integer getDistinctUsers(Long characterId) {
-        return voteRepository.countDistinctUsers(characterId);
+        return voteRepository.countDistinctUserByCharacter(characterService.getCharacterById(characterId));
     }
 
     private Path saveFile(Vote vote, MultipartFile file) throws IOException {
