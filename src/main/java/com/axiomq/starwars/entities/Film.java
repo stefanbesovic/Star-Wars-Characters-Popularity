@@ -22,7 +22,6 @@ public class Film {
 
     private String name;
 
-    @JsonIgnore
     @ManyToMany(mappedBy = "films", fetch = FetchType.LAZY)
     private Set<Character> characters = new HashSet<>();
 

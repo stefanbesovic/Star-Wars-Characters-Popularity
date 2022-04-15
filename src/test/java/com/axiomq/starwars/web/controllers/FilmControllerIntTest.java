@@ -3,11 +3,16 @@ package com.axiomq.starwars.web.controllers;
 import com.axiomq.starwars.entities.Film;
 import com.axiomq.starwars.repositories.FilmRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -20,16 +25,29 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@Sql(value = "/sql/film-init.sql")
+@ActiveProfiles("test")
 @Transactional
 class FilmControllerIntTest {
 
-    private final static String TOKEN = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzdGVmYW5iZXNvdmljQGdtYWlsLmNvbSIsImF1dGhvcml0aWVzIjpbeyJhdXRob3JpdHkiOiJBRE1JTiJ9XSwiaWF0IjoxNjQ5MTQ3NTQ1LCJleHAiOjE2NDk5NzM2MDB9.jv2nvSsPe6r_SuinLuXkarpq-o38ihtyRXGKEDCyHbs";
+    private static String TOKEN;
 
     @Autowired
     private MockMvc mockMvc;
 
     @Autowired
     private FilmRepository filmRepository;
+
+    @BeforeEach
+    void setUp() throws Exception {
+        MvcResult result = mockMvc.perform(post("/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"email\":\"stefanbesovic@gmail.com\",\"password\":\"bass\"}"))
+                .andDo(print())
+                .andReturn();
+        String content = result.getResponse().getHeader("Authorization");
+        TOKEN = content.substring("Bearer ".length(), content.length());
+    }
 
     @Test
     void givenFilm_whenSaveFilm_thenOk() throws Exception {
@@ -68,7 +86,8 @@ class FilmControllerIntTest {
         //when //then
         mockMvc.perform(post("/api/film")
                         .contentType("application/json")
-                        .content(json))
+                        .content(json)
+                        .header("Authorization", "Bearer " + TOKEN))
                 .andDo(print())
                 .andExpect(status().isBadRequest());
     }
