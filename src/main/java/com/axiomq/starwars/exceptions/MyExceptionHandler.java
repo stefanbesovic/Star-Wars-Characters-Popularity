@@ -1,5 +1,6 @@
 package com.axiomq.starwars.exceptions;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.BindingResult;
@@ -14,6 +15,7 @@ import java.sql.Timestamp;
 import java.util.*;
 
 @RestControllerAdvice
+@Slf4j
 public class MyExceptionHandler {
 
     @ExceptionHandler(ObjectNotFoundException.class)
@@ -21,6 +23,7 @@ public class MyExceptionHandler {
     public ErrorDetails ObjectNotFoundHandler(ObjectNotFoundException exception,
                                              HttpServletRequest request) {
 
+        log.error("Object not found exception has occurred.", exception);
         return ErrorDetails.builder()
                 .path(request.getServletPath())
                 .timestamp(new Timestamp(new Date().getTime()))
@@ -32,6 +35,7 @@ public class MyExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorDetails NoSuchElementHandler(NotAuthorizedException exception,
                                              HttpServletRequest request) {
+        log.error("No such element exception has occurred.", exception);
 
         return ErrorDetails.builder()
                 .path(request.getServletPath())
@@ -45,6 +49,8 @@ public class MyExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorDetails validationErrorHandler(MethodArgumentNotValidException exception,
                                                HttpServletRequest request) {
+        log.error("Validation error exception has occurred.", exception);
+
         ErrorDetails error = ErrorDetails.builder()
                 .path(request.getServletPath())
                 .timestamp(new Timestamp(new Date().getTime()))
