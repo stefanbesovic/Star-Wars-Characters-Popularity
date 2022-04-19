@@ -9,6 +9,7 @@ import com.axiomq.starwars.services.CharacterService;
 import com.axiomq.starwars.services.UserService;
 import com.axiomq.starwars.services.VoteService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -24,6 +25,7 @@ import java.util.UUID;
 
 @RequiredArgsConstructor
 @Service
+@Slf4j
 public class VoteServiceImpl implements VoteService {
 
     private final VoteRepository voteRepository;
@@ -34,6 +36,7 @@ public class VoteServiceImpl implements VoteService {
     @Override
     public Vote saveVote(Vote vote, MultipartFile file, Long characterId, Principal principal) throws IOException {
 
+        log.info("Saving vote: '{}' to database.", vote.getId());
         User byEmail = userService.findByEmail(principal.getName());
         vote.setUser(byEmail);
 
@@ -54,17 +57,21 @@ public class VoteServiceImpl implements VoteService {
 
     @Override
     public List<Vote> getAllVotes() {
+        log.info("Getting list of all votes.");
         return voteRepository.findAll();
     }
 
     @Override
     public Vote getVoteById(Long id) {
+        log.info("Getting vote by id: {}", id);
         return voteRepository.findById(id)
                 .orElseThrow(() -> new ObjectNotFoundException(String.format("Vote not found: %d", id)));
     }
 
     @Override
     public Vote updateVote(Vote vote, MultipartFile icon, Long id, Principal principal) throws IOException{
+
+        log.info("Updating vote with id: {}.", id);
         Vote existing = getVoteById(id);
 
         if(!existing.getUser().getEmail().equals(principal.getName()))
@@ -82,6 +89,7 @@ public class VoteServiceImpl implements VoteService {
 
     @Override
     public void deleteVote(Long id, Principal principal) {
+        log.info("Deleting vote with id {}", id);
         Vote vote = getVoteById(id);
         if(!vote.getUser().getEmail().equals(principal.getName()))
             throw new ObjectNotFoundException("You are not authorized for this action.");
@@ -95,10 +103,12 @@ public class VoteServiceImpl implements VoteService {
 
     @Override
     public Integer getDistinctUsers(Long characterId) {
+        log.info("Getting the number of users who vote for character with id: {}", characterId);
         return voteRepository.countDistinctUserByCharacter(characterService.getCharacterById(characterId));
     }
 
     private Path saveFile(Vote vote, MultipartFile file) throws IOException {
+        log.info("Saving icon '{}' to vote with id: {}", file.getOriginalFilename(), vote.getId());
 
         String fileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
         Path fullPath = Paths.get(uploadDirectory, fileName);
