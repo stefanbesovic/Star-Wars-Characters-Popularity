@@ -9,6 +9,7 @@ import com.axiomq.starwars.web.dtos.character.CharacterGet;
 import com.axiomq.starwars.web.dtos.character.CharacterConverter;
 import com.axiomq.starwars.web.dtos.character.CharacterResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
@@ -22,6 +23,7 @@ import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
+@Slf4j
 public class CharacterImportServiceImpl implements CharacterImportService {
 
     private final CharacterConverter characterConverter;
@@ -31,6 +33,7 @@ public class CharacterImportServiceImpl implements CharacterImportService {
 
     @Override
     public Set<Character> populateCharacters() {
+        log.info("Fetching characters from SWAPI.");
         String url = appProperties.getUrl();
         List<Film> films = filmService.getAllFilms();
 
@@ -43,6 +46,7 @@ public class CharacterImportServiceImpl implements CharacterImportService {
             }
             return characters;
         } catch (HttpClientErrorException e) {
+            log.error("Error occurred while trying to fetch Characters from SWAPI.");
             throw new HttpClientErrorException(HttpStatus.NOT_FOUND);
         }
     }
