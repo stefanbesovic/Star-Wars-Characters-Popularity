@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import javax.servlet.http.HttpServletRequest;
+import java.awt.*;
 import java.sql.Timestamp;
 import java.util.*;
 
@@ -67,5 +68,19 @@ public class MyExceptionHandler {
 
         error.setValidationErorr(errors);
         return error;
+    }
+
+    @ExceptionHandler(ImageUploadException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorDetails NoSuchElementHandler(ImageUploadException exception,
+                                             HttpServletRequest request) {
+        log.error("Unable to read inputStream for image.", exception);
+
+        return ErrorDetails.builder()
+                .path(request.getServletPath())
+                .timestamp(new Timestamp(new Date().getTime()))
+                .message(exception.getMessage())
+                .validationErorr(Collections.singletonMap("error", "Can't find image."))
+                .build();
     }
 }
