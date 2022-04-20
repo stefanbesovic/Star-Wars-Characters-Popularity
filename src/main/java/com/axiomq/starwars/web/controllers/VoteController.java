@@ -5,6 +5,7 @@ import com.axiomq.starwars.services.VoteService;
 import com.axiomq.starwars.web.dtos.vote.VoteMapper;
 import com.axiomq.starwars.web.dtos.vote.VoteRequest;
 import com.axiomq.starwars.web.dtos.vote.VoteResponse;
+import com.axiomq.starwars.web.dtos.vote.VoteUpdateDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -13,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.Nullable;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.security.Principal;
@@ -75,9 +77,9 @@ public class VoteController {
     @PutMapping("/{id}")
     public VoteResponse updateVote(@PathVariable("id") Long id,
                                    @RequestPart("icon") MultipartFile icon,
-                                   @Valid @RequestPart("request") VoteRequest voteRequest,
+                                   @Valid @RequestPart("request") VoteUpdateDto voteUpdateDto,
                                    Principal principal) {
-        Vote vote = voteService.updateVote(VoteMapper.INSTANCE.fromReqDto(voteRequest), icon, id, principal);
+        Vote vote = voteService.updateVote(VoteMapper.INSTANCE.fromUpdDto(voteUpdateDto), icon, id, principal);
         return VoteMapper.INSTANCE.toResDto(vote);
     }
 

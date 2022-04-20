@@ -27,4 +27,7 @@ public class VoteResponse {
 
     @Schema(description = "Icon's full path")
     private String url;
+
+    @Schema(description = "Id of character")
+    private Long characterId;
 }
