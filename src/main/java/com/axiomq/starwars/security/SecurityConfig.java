@@ -43,7 +43,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .antMatchers("/login").permitAll()
-                .antMatchers("/logout").permitAll()
+
+                .antMatchers("/swagger-ui.html").permitAll()
+                .antMatchers("/swagger-ui/**").permitAll()
+                .antMatchers("/v3/api-docs/**").permitAll()
+                .antMatchers("/v3/api-docs.yaml").permitAll()
 
                 .antMatchers("/api/**").hasAnyAuthority(Role.USER.name(), Role.ADMIN.name())
                 .antMatchers("/admin/**").hasAnyAuthority(Role.ADMIN.name())
