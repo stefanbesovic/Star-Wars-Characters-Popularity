@@ -1,0 +1,38 @@
+### login
+POST http://localhost:8080/login
+Content-Type: application/json
+
+{
+  "email": "stefanbesovic@gmail.com",
+  "password": "bass"
+}
+
+> {%
+ client.global.set("accessToken", response.headers.valueOf("Authorization").substring("Bearer ".length));
+ %}
+
+### list all users
+GET http://localhost:8080/api/user
+Accept: application/json
+Authorization: Bearer {{accessToken}}
+
+### add new user
+POST http://localhost:8080/api/user
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "username": "mirko",
+  "email": "mirko@gmail.com",
+  "password": "mirko"
+}
+
+### delete user with id 5
+DELETE http://localhost:8080/api/user/5
+Authorization: Bearer {{accessToken}}
+
+### get user with id 1
+GET http://localhost:8080/api/user/1
+Accept: application/json
+Authorization: Bearer {{accessToken}}
