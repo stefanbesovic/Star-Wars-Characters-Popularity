@@ -3,6 +3,7 @@ package com.axiomq.starwars.services.impl;
 import com.axiomq.starwars.entities.Character;
 import com.axiomq.starwars.entities.User;
 import com.axiomq.starwars.entities.Vote;
+import com.axiomq.starwars.exceptions.ImageUploadException;
 import com.axiomq.starwars.exceptions.ObjectNotFoundException;
 import com.axiomq.starwars.repositories.VoteRepository;
 import com.axiomq.starwars.services.CharacterService;
@@ -34,7 +35,7 @@ public class VoteServiceImpl implements VoteService {
     private final UserService userService;
 
     @Override
-    public Vote saveVote(Vote vote, MultipartFile file, Long characterId, Principal principal) throws IOException {
+    public Vote saveVote(Vote vote, MultipartFile file, Long characterId, Principal principal) {
 
         log.info("Saving vote: '{}' to database.", vote.getId());
         User byEmail = userService.findByEmail(principal.getName());
@@ -69,7 +70,7 @@ public class VoteServiceImpl implements VoteService {
     }
 
     @Override
-    public Vote updateVote(Vote vote, MultipartFile icon, Long id, Principal principal) throws IOException{
+    public Vote updateVote(Vote vote, MultipartFile icon, Long id, Principal principal) {
 
         log.info("Updating vote with id: {}.", id);
         Vote existing = getVoteById(id);
@@ -107,7 +108,7 @@ public class VoteServiceImpl implements VoteService {
         return voteRepository.countDistinctUserByCharacter(characterService.getCharacterById(characterId));
     }
 
-    private Path saveFile(Vote vote, MultipartFile file) throws IOException {
+    private Path saveFile(Vote vote, MultipartFile file) {
         log.info("Saving icon '{}' to vote with id: {}", file.getOriginalFilename(), vote.getId());
 
         String fileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
@@ -119,7 +120,7 @@ public class VoteServiceImpl implements VoteService {
             return fullPath;
 
         } catch (IOException e) {
-            throw new IOException(String.format("Can't upload file with name %s.", file.getOriginalFilename()));
+            throw new ImageUploadException(String.format("Can't upload file with name %s.", file.getOriginalFilename()));
         }
     }
 }
