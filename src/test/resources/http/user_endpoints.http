@@ -28,11 +28,27 @@ Authorization: Bearer {{accessToken}}
   "password": "mirko"
 }
 
-### delete user with id 5
-DELETE http://localhost:8080/api/user/5
+> {%
+ client.global.set("objectId", response.body.id);
+ %}
+
+### get newly added user
+GET http://localhost:8080/api/user/{{objectId}}
+Accept: application/json
 Authorization: Bearer {{accessToken}}
 
-### get user with id 1
-GET http://localhost:8080/api/user/1
+### update newly added user
+PUT http://localhost:8080/api/user/{{objectId}}
+Content-Type: application/json
 Accept: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "username": "mirkomikic",
+  "email": "mirko123@gmail.com",
+  "password": "mirko123"
+}
+
+### delete newly added user
+DELETE http://localhost:8080/api/user/{{objectId}}
 Authorization: Bearer {{accessToken}}
