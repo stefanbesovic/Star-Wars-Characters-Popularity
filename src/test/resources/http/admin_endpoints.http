@@ -1,0 +1,18 @@
+### login
+POST http://localhost:8080/login
+Content-Type: application/json
+
+{
+  "email": "stefanbesovic@gmail.com",
+  "password": "bass"
+}
+
+> {%
+ client.global.set("accessToken", response.headers.valueOf("Authorization").substring("Bearer ".length));
+ %}
+
+### fetch characters from swapi
+POST http://localhost:8080/admin/script
+Accept: application/json
+Authorization: Bearer {{accessToken}}
+
