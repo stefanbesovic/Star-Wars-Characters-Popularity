@@ -1,0 +1,67 @@
+### login
+POST http://localhost:8080/login
+Content-Type: application/json
+
+{
+  "email": "stefanbesovic@gmail.com",
+  "password": "bass"
+}
+
+> {%
+ client.global.set("accessToken", response.headers.valueOf("Authorization").substring("Bearer ".length));
+ %}
+
+### list all votes
+GET http://localhost:8080/api/vote
+Accept: application/json
+Authorization: Bearer {{accessToken}}
+
+### get vote with id 1
+GET http://localhost:8080/api/vote/1
+Accept: application/json
+Authorization: Bearer {{accessToken}}
+
+### save vote
+POST http://localhost:8080/api/vote
+Content-Type: multipart/form-data; boundary=boundary
+Accept: application/json
+Authorization: Bearer {{accessToken}}
+
+--boundary
+Content-Disposition: form-data; name="icon"; filename="angry.png"
+
+< ../icons/angry.png
+
+--boundary
+Content-Disposition: form-data; name="request";
+Content-Type: application/json
+
+{
+  "value": 5,
+  "comment": "This is comment",
+  "characterId": 2
+}
+
+### update vote with id 1
+PUT http://localhost:8080/api/vote/1
+Content-Type: multipart/form-data; boundary=boundary
+Accept: application/json
+Authorization: Bearer {{accessToken}}
+
+--boundary
+Content-Disposition: form-data; name="icon"; filename=""
+
+
+--boundary
+Content-Disposition: form-data; name="request";
+Content-Type: application/json
+
+{
+  "value": 10,
+  "comment": "This is a new comment about this character",
+  "characterId": 9
+}
+
+### delete vote with id 2
+DELETE http://localhost:8080/api/vote/2
+Authorization: Bearer {{accessToken}}
