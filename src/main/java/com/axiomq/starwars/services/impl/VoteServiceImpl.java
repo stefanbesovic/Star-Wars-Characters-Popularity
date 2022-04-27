@@ -22,6 +22,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.security.Principal;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @RequiredArgsConstructor
@@ -78,12 +79,17 @@ public class VoteServiceImpl implements VoteService {
         if(!existing.getUser().getEmail().equals(principal.getName()))
             throw new ObjectNotFoundException("You are not authorized for this action.");
 
-        existing.setComment(vote.getComment());
-        existing.setValue(vote.getValue());
+        if(vote.getComment() != null)
+            existing.setComment(vote.getComment());
 
-        Path path = saveFile(vote, icon);
-        existing.setIcon(path.getFileName().toString());
-        existing.setUrl(path.toString());
+        if(vote.getValue() != null)
+            existing.setValue(vote.getValue());
+
+        if(!Objects.equals(icon.getOriginalFilename(), "")) {
+            Path path = saveFile(vote, icon);
+            existing.setIcon(path.getFileName().toString());
+            existing.setUrl(path.toString());
+        }
 
         return voteRepository.save(existing);
     }
