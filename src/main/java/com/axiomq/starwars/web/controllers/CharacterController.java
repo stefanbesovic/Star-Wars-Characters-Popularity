@@ -2,6 +2,8 @@ package com.axiomq.starwars.web.controllers;
 
 import com.axiomq.starwars.entities.Character;
 import com.axiomq.starwars.services.CharacterService;
+import com.axiomq.starwars.web.dtos.character.CharacterDto;
+import com.axiomq.starwars.web.dtos.character.CharacterMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @RestController
@@ -26,8 +29,11 @@ public class CharacterController {
             @ApiResponse(responseCode = "500", description = "Internal Server Error")
     })
     @GetMapping
-    public List<Character> getAllCharacters() {
-        return characterService.getAllCharacters();
+    public List<CharacterDto> getAllCharacters() {
+        return characterService.getAllCharacters()
+                .stream()
+                .map(CharacterMapper.INSTANCE::toDto)
+                .collect(Collectors.toList());
     }
 
     @Operation(summary = "Deletes Character")

@@ -1,0 +1,27 @@
+### login
+POST http://localhost:8080/login
+Content-Type: application/json
+
+{
+  "email": "stefanbesovic@gmail.com",
+  "password": "bass"
+}
+
+> {%
+ client.global.set("accessToken", response.headers.valueOf("Authorization").substring("Bearer ".length));
+ %}
+
+### list all characters
+GET http://localhost:8080/api/character
+Accept: application/json
+Authorization: Bearer {{accessToken}}
+
+### delete character with id 2
+DELETE http://localhost:8080/api/character/2
+Authorization: Bearer {{accessToken}}
+
+### list all characters
+GET http://localhost:8080/api/character
+Accept: application/json
+Authorization: Bearer {{accessToken}}
+
