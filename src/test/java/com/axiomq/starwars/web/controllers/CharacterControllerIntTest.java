@@ -50,7 +50,7 @@ class CharacterControllerIntTest {
     void givenCorrectURL_whenPopulateCharacters_ReturnOk() throws Exception {
         //given
         //when
-        mockMvc.perform(post("/api/character/script")
+        mockMvc.perform(post("/api/admin/script")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk());

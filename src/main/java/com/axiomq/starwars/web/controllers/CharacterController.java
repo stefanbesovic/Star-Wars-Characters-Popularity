@@ -1,6 +1,5 @@
 package com.axiomq.starwars.web.controllers;
 
-import com.axiomq.starwars.entities.Character;
 import com.axiomq.starwars.services.CharacterService;
 import com.axiomq.starwars.web.dtos.character.CharacterDto;
 import com.axiomq.starwars.web.dtos.character.CharacterMapper;
@@ -11,7 +10,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.Principal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -46,5 +44,4 @@ public class CharacterController {
     public void deleteCharacter(@PathVariable("id") Long id) {
         characterService.deleteCharacter(id);
     }
-
 }

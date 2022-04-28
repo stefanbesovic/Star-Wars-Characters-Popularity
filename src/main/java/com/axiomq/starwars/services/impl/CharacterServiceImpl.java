@@ -60,5 +60,4 @@ public class CharacterServiceImpl implements CharacterService {
         log.info("Saving all fetched Characters from SWAPI to database.");
         characterRepository.saveAll(characters);
     }
-
 }

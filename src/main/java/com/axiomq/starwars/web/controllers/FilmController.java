@@ -1,6 +1,5 @@
 package com.axiomq.starwars.web.controllers;
 
-import com.axiomq.starwars.entities.Film;
 import com.axiomq.starwars.services.FilmService;
 import com.axiomq.starwars.web.dtos.film.FilmDto;
 import com.axiomq.starwars.web.dtos.film.FilmMapper;

@@ -12,7 +12,6 @@ import org.springframework.stereotype.Component;
 @Getter
 @Setter
 public class AppProperties {
-
     private String url;
     private String planets;
     private String films;

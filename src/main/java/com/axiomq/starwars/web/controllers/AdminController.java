@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @Tag(name = "Admin Controller", description = "Set of endpoints accessible only by ADMIN.")
 public class AdminController {
+
     private final CharacterService characterService;
 
     @Operation(summary = "Gets data from SWAPI and populates Character table.")

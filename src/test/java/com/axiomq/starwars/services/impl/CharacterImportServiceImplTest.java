@@ -2,13 +2,11 @@ package com.axiomq.starwars.services.impl;
 
 
 import com.axiomq.starwars.config.AppProperties;
-import com.axiomq.starwars.entities.Character;
-import com.axiomq.starwars.entities.Film;
 import com.axiomq.starwars.services.CharacterImportService;
 import com.axiomq.starwars.services.FilmService;
 import com.axiomq.starwars.web.dtos.character.CharacterGet;
 import com.axiomq.starwars.web.dtos.character.CharacterResponse;
-import com.axiomq.starwars.web.dtos.character.CharacterConverter;
+import com.axiomq.starwars.util.CharacterConverter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,10 +21,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
-import java.net.http.HttpClient;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -93,6 +88,5 @@ class CharacterImportServiceImplTest {
         Exception e = assertThrows(HttpClientErrorException.class, () -> {
             characterImportService.populateCharacters();
         });
-
     }
 }

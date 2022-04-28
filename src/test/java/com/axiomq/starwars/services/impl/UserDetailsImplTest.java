@@ -2,6 +2,7 @@ package com.axiomq.starwars.services.impl;
 
 import com.axiomq.starwars.entities.User;
 import com.axiomq.starwars.enums.Role;
+import com.axiomq.starwars.exceptions.ObjectNotFoundException;
 import com.axiomq.starwars.repositories.UserRepository;
 import com.axiomq.starwars.services.UserService;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,7 +12,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -57,7 +57,7 @@ class UserDetailsImplTest {
 
         //when
         when(userRepository.findById(user.getId())).thenReturn(Optional.empty());
-        Exception e = assertThrows(NoSuchElementException.class, () -> {
+        Exception e = assertThrows(ObjectNotFoundException.class, () -> {
             userService.getUserById(user.getId());
         });
 

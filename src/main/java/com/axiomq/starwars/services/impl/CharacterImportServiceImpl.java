@@ -6,7 +6,7 @@ import com.axiomq.starwars.entities.Film;
 import com.axiomq.starwars.services.CharacterImportService;
 import com.axiomq.starwars.services.FilmService;
 import com.axiomq.starwars.web.dtos.character.CharacterGet;
-import com.axiomq.starwars.web.dtos.character.CharacterConverter;
+import com.axiomq.starwars.util.CharacterConverter;
 import com.axiomq.starwars.web.dtos.character.CharacterResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
