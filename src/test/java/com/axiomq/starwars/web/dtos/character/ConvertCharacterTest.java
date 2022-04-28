@@ -4,11 +4,10 @@ import com.axiomq.starwars.config.AppProperties;
 import com.axiomq.starwars.entities.Film;
 import com.axiomq.starwars.enums.Gender;
 import com.axiomq.starwars.enums.Planet;
-import com.axiomq.starwars.services.FilmService;
+import com.axiomq.starwars.util.CharacterConverter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -28,9 +27,6 @@ import static org.junit.jupiter.api.Assertions.*;
 @TestPropertySource("classpath:application.properties")
 class ConvertCharacterTest {
 
-    @Mock
-    private FilmService filmService;
-
     @Autowired
     private AppProperties appProperties;
 
@@ -40,7 +36,7 @@ class ConvertCharacterTest {
 
     @BeforeEach
     void setUp() {
-        characterConverter = new CharacterConverter(filmService, appProperties);
+        characterConverter = new CharacterConverter(appProperties);
         films.add(Film.builder().id(1L).name("aa").build());
         films.add(Film.builder().id(2L).name("bb").build());
         films.add(Film.builder().id(3L).name("cc").build());
@@ -198,6 +194,5 @@ class ConvertCharacterTest {
         //then
         Exception e = assertThrows(IllegalArgumentException.class,
                 () -> characterConverter.convertGender(genderString));
-
     }
 }

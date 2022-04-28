@@ -23,5 +23,4 @@ public class VoteUpdateDto {
     @Schema(description = "Comment about character")
     @Size(max = 120, message = "Comment can hold only 120 characters.")
     private String comment;
-
 }

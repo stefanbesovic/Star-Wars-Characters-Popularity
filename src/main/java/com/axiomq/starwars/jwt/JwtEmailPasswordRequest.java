@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 public class JwtEmailPasswordRequest {
-
     private String email;
     private String password;
 }

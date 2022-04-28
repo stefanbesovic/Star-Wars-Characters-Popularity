@@ -32,6 +32,7 @@ public class JwtEmailPasswordAuthFilter extends UsernamePasswordAuthenticationFi
         try {
             JwtEmailPasswordRequest authenticationRequest = new ObjectMapper()
                     .readValue(request.getInputStream(), JwtEmailPasswordRequest.class);
+
             Authentication auth = new UsernamePasswordAuthenticationToken(
                     authenticationRequest.getEmail(),
                     authenticationRequest.getPassword()
@@ -48,7 +49,7 @@ public class JwtEmailPasswordAuthFilter extends UsernamePasswordAuthenticationFi
     protected void successfulAuthentication(HttpServletRequest request,
                                             HttpServletResponse response,
                                             FilterChain chain,
-                                            Authentication authResult) throws IOException, ServletException {
+                                            Authentication authResult) {
 
         String token = Jwts.builder()
                 .setSubject(authResult.getName())

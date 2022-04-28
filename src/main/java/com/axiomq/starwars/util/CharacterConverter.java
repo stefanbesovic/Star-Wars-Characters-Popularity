@@ -1,16 +1,14 @@
-package com.axiomq.starwars.web.dtos.character;
+package com.axiomq.starwars.util;
 
 import com.axiomq.starwars.config.AppProperties;
 import com.axiomq.starwars.entities.Character;
 import com.axiomq.starwars.entities.Film;
 import com.axiomq.starwars.enums.Gender;
 import com.axiomq.starwars.enums.Planet;
-import com.axiomq.starwars.services.FilmService;
+import com.axiomq.starwars.web.dtos.character.CharacterResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -19,7 +17,6 @@ import java.util.stream.Collectors;
 @Service
 public class CharacterConverter {
 
-    private final FilmService filmService;
     private final AppProperties appProperties;
 
     public Character toCharacter(CharacterResponse characterResponse, List<Film> films) {
@@ -38,6 +35,7 @@ public class CharacterConverter {
 
         if(gender.equals("n/a"))
             return Gender.N_A;
+
         return Gender.valueOf(gender.toUpperCase());
     }
 
@@ -46,7 +44,6 @@ public class CharacterConverter {
             throw new IllegalArgumentException("Homeworld is null.");
 
         String prefix = appProperties.getPlanets();
-
         int planet = getPlainNumber(prefix, homeworld) - 1;
 
         if(planet > 6)

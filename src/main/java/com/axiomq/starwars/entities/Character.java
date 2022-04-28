@@ -30,12 +30,13 @@ public class Character {
             joinColumns = @JoinColumn(name = "character_id"),
             inverseJoinColumns = @JoinColumn(name = "film_id")
     )
-    private Set<Film> films = new HashSet<>();
+    private Set<Film> films;
+
     private Planet planet;
     private Integer votersCount;
 
     @OneToMany(mappedBy = "character", orphanRemoval = true, fetch = FetchType.LAZY)
-    private Set<Vote> votes = new HashSet<>();
+    private Set<Vote> votes;
 
     @Override
     public boolean equals(Object o) {

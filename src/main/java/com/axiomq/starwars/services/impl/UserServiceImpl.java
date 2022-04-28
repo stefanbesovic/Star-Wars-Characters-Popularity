@@ -67,5 +67,4 @@ public class UserServiceImpl implements UserService {
                 new ObjectNotFoundException(String.format("User with email %s does not exist.", email))
         );
     }
-
 }

@@ -30,5 +30,4 @@ public class VoteRequest {
     @NotNull
     @Range(min = 1, message = "Character id must be a positive value.")
     private Long characterId;
-
 }

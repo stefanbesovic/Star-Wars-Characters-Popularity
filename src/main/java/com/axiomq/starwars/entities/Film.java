@@ -1,6 +1,5 @@
 package com.axiomq.starwars.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -23,7 +22,7 @@ public class Film {
     private String name;
 
     @ManyToMany(mappedBy = "films", fetch = FetchType.LAZY)
-    private Set<Character> characters = new HashSet<>();
+    private Set<Character> characters;
 
     @Override
     public boolean equals(Object o) {

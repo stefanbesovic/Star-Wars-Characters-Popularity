@@ -3,6 +3,7 @@ package com.axiomq.starwars.services.impl;
 import com.axiomq.starwars.entities.Character;
 import com.axiomq.starwars.enums.Gender;
 import com.axiomq.starwars.enums.Planet;
+import com.axiomq.starwars.exceptions.ObjectNotFoundException;
 import com.axiomq.starwars.repositories.CharacterRepository;
 import com.axiomq.starwars.services.CharacterImportService;
 import com.axiomq.starwars.services.CharacterService;
@@ -12,7 +13,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -60,7 +60,7 @@ class CharacterServiceImplTest {
 
         //when
         when(characterRepository.findById(character.getId())).thenReturn(Optional.empty());
-        Exception e = assertThrows(NoSuchElementException.class, () -> {
+        Exception e = assertThrows(ObjectNotFoundException.class, () -> {
             characterService.getCharacterById(character.getId());
         });
 
