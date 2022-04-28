@@ -16,11 +16,6 @@ GET http://localhost:8080/api/vote
 Accept: application/json
 Authorization: Bearer {{accessToken}}
 
-### get vote with id 1
-GET http://localhost:8080/api/vote/1
-Accept: application/json
-Authorization: Bearer {{accessToken}}
-
 ### save vote
 POST http://localhost:8080/api/vote
 Content-Type: multipart/form-data; boundary=boundary
@@ -42,8 +37,12 @@ Content-Type: application/json
   "characterId": 2
 }
 
-### update vote with id 1
-PUT http://localhost:8080/api/vote/1
+> {%
+ client.global.set("objectId", response.body.id);
+ %}
+
+### update created vote
+PUT http://localhost:8080/api/vote/{{objectId}}
 Content-Type: multipart/form-data; boundary=boundary
 Accept: application/json
 Authorization: Bearer {{accessToken}}
@@ -62,6 +61,11 @@ Content-Type: application/json
   "characterId": 9
 }
 
-### delete vote with id 2
-DELETE http://localhost:8080/api/vote/2
+### list all votes
+GET http://localhost:8080/api/vote
+Accept: application/json
+Authorization: Bearer {{accessToken}}
+
+### delete created vote
+DELETE http://localhost:8080/api/vote/{{objectId}}
 Authorization: Bearer {{accessToken}}
