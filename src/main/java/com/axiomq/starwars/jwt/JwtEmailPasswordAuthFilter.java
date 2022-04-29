@@ -30,8 +30,9 @@ public class JwtEmailPasswordAuthFilter extends UsernamePasswordAuthenticationFi
     public Authentication attemptAuthentication(HttpServletRequest request,
                                                 HttpServletResponse response) throws AuthenticationException {
         try {
-            JwtEmailPasswordRequest authenticationRequest = new ObjectMapper()
-                    .readValue(request.getInputStream(), JwtEmailPasswordRequest.class);
+            JwtEmailPasswordRequest authenticationRequest =
+                    new JwtEmailPasswordRequest(request.getParameter("email"),
+                                                request.getParameter("password"));
 
             Authentication auth = new UsernamePasswordAuthenticationToken(
                     authenticationRequest.getEmail(),
@@ -45,7 +46,7 @@ public class JwtEmailPasswordAuthFilter extends UsernamePasswordAuthenticationFi
         }
     }
 
-    @Override
+   /* @Override
     protected void successfulAuthentication(HttpServletRequest request,
                                             HttpServletResponse response,
                                             FilterChain chain,
@@ -60,5 +61,5 @@ public class JwtEmailPasswordAuthFilter extends UsernamePasswordAuthenticationFi
                 .compact();
 
         response.addHeader(jwtConfig.getAuthorizationHeader(), jwtConfig.getTokenPrefix() + token);
-    }
+    }*/
 }

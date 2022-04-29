@@ -3,7 +3,6 @@ package com.axiomq.starwars.security;
 import com.axiomq.starwars.auth.UserDetailsServiceImpl;
 import com.axiomq.starwars.enums.Role;
 import com.axiomq.starwars.jwt.JwtEmailPasswordAuthFilter;
-import com.axiomq.starwars.jwt.JwtTokenVerifier;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,7 +12,6 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
@@ -38,11 +36,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .cors()
                 .and()
                 .csrf().disable()
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+
+                .formLogin()
+                    .loginPage("/login").permitAll()
+                .and()
+                    .logout().permitAll()
+
                 .and()
                 .authorizeRequests()
-                .antMatchers("/login").permitAll()
+                .antMatchers("/**").permitAll()
+
+                .antMatchers("/css/**", "/js/**", "/static/**").permitAll()
 
                 .antMatchers("/swagger-ui.html").permitAll()
                 .antMatchers("/swagger-ui/**").permitAll()
@@ -56,8 +60,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest()
                 .authenticated()
                 .and()
-                .addFilterBefore(new JwtEmailPasswordAuthFilter(authenticationManager(), jwtConfig, secretKey), UsernamePasswordAuthenticationFilter.class)
-                .addFilterAfter(new JwtTokenVerifier(secretKey, jwtConfig), JwtEmailPasswordAuthFilter.class);
+                .addFilterBefore(new JwtEmailPasswordAuthFilter(authenticationManager(), jwtConfig, secretKey), UsernamePasswordAuthenticationFilter.class);
+                //.addFilterAfter(new JwtTokenVerifier(secretKey, jwtConfig), JwtEmailPasswordAuthFilter.class);
     }
 
     @Override
