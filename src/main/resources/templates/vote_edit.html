@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Vote</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet" th:href="@{/css/main.css}" type="text/css" >
+</head>
+<body>
+<div th:insert="fragments/header :: menu"></div>
+
+<div class="container">
+    <form th:action="@{/api/vote/edit}" method="post" th:object="${vote}" enctype="multipart/form-data">
+
+        <h1 class="mt-5 mb-5"> Updating Your VOTE for Character:  <span th:text="*{character.name}"></span></h1>
+        <input type="hidden" th:field="*{id}">
+        <div class="form-group">
+            <label for="valueEdit">Rate Your Character</label>
+            <select class="form-control" id="valueEdit" name="value" th:field="*{value}">
+                <option th:each="n : ${#numbers.sequence(1,10)}" th:value="${n}" th:text="${n}" th:selected="${n == num}"></option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="commentEdit">Write Your Comment</label>
+            <textarea th:field="*{comment}" th:text="${vote.getComment()}" class="form-control" id="commentEdit" name="comment" rows="3"></textarea>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label" for="iconEdit">Upload icon</label>
+            <input type="file" class="form-control" id="iconEdit" name="icon"/>
+        </div>
+
+        <div class="container text-center">
+            <button type="submit" class="btn btn-dark">Submit Changes</button>
+        </div>
+    </form>
+</div>
+</body>
+</html>

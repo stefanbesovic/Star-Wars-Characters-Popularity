@@ -16,6 +16,8 @@ import javax.validation.constraints.Size;
 @Schema(description = "Vote update object")
 public class VoteUpdateDto {
 
+    private Long id;
+
     @Schema(description = "User's rate of Character")
     @Range(min = 1, max = 10, message = "Value must be between 1 and 10.")
     private Integer value;

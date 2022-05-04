@@ -21,9 +21,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.security.Principal;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 @RequiredArgsConstructor
 @Service
@@ -31,12 +29,12 @@ import java.util.UUID;
 public class VoteServiceImpl implements VoteService {
 
     private final VoteRepository voteRepository;
-    private static final String uploadDirectory = System.getProperty("user.dir") + "/src/main/resources/icons";
+    private static final String uploadDirectory = System.getProperty("user.dir") + "/src/main/resources/static/icons";
     private final CharacterService characterService;
     private final UserService userService;
 
     @Override
-    public Vote saveVote(Vote vote, MultipartFile file, Long characterId, Principal principal) {
+    public Vote saveVote(Vote vote, MultipartFile file, Long characterId, Principal principal)  {
 
         log.info("Saving vote: '{}' to database.", vote.getId());
         User byEmail = userService.findByEmail(principal.getName());
@@ -85,7 +83,7 @@ public class VoteServiceImpl implements VoteService {
         if(vote.getValue() != null)
             existing.setValue(vote.getValue());
 
-        if(!Objects.equals(icon.getOriginalFilename(), "")) {
+        if(!Objects.equals(icon.getOriginalFilename(), "") || icon.getOriginalFilename() == null) {
             Path path = saveFile(vote, icon);
             existing.setIcon(path.getFileName().toString());
             existing.setUrl(path.toString());
