@@ -2,8 +2,6 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">>
 <head>
-    <link th:rel="stylesheet" th:href="@{assets/bootstrap4-toggle/bootstrap4-toggle.min.css}"/>
-    <link th:rel="stylesheet" th:href="@{webjars/bootstrap/4.0.0-2/css/bootstrap.min.css} "/>
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top" th:fragment="menu">
@@ -18,7 +16,7 @@
                     <a class="nav-link" th:href="@{/api/film}">Films</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" th:href="@{/api/character}">Characters</a>
+                    <a class="nav-link" th:href="@{/api/character/all}">Characters</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" th:href="@{/api/vote}">Votes</a>
@@ -31,6 +29,9 @@
                 </li>
                 <li class="nav-item" sec:authorize="isAuthenticated()">
                     <a class="nav-link" th:href="@{/logout}">Log Out</a>
+                </li>
+                <li class="nav-item" sec:authorize="!isAuthenticated()">
+                    <a class="nav-link" th:href="@{/register}">Register</a>
                 </li>
             </ul>
         </div>

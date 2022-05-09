@@ -4,7 +4,15 @@ body {
     background-color: #eee;
 }
 
+h1 {
+    text-align: center;
+}
+
 .container {
+    text-align: center;
+}
+
+a {
     text-align: center;
 }
 
