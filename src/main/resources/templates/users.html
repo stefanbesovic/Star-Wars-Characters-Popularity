@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>List of all Users</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}" type="text/css" >
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+          integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+</head>
+<body>
+<div th:insert="fragments/header :: menu"></div>
+<div class="container mt-5">
+    <h1 class="mb-5 mt-5"> List of All Users!</h1>
+    <table class="table table-striped mt-5">
+        <thead>
+        <tr>
+            <th scope="col">Id</th>
+            <th scope="col">Username</th>
+            <th scope="col">Email</th>
+            <th scope="col">Role</th>
+            <th scope="col">Actions</th>
+        </tr>
+        </thead>
+        <th:block th:each="user : ${users}">
+            <tr>
+                <td th:text="${user.getId()}"></td>
+                <td th:text="${user.getUsername()}"></td>
+                <td th:text="${user.getEmail()}"></td>
+                <td th:text="${user.getRole()}"></td>
+                <td>
+                    <a th:href="@{/admin/user/delete(userId=${user.getId()})}"
+                       class="btn btn-danger btn-sm" onclick="if (!(confirm('Are you sure that you want to delete this user?'))) return false">Delete</a>
+                </td>
+            </tr>
+        </th:block>
+    </table>
+</div>
+</body>
+</html>

@@ -16,6 +16,15 @@ img {
     display: flex;
     justify-content: start;
     gap: 20px;
+    text-align: center;
+}
+
+.container {
+    text-align: center;
+}
+
+a {
+    text-align: center;
 }
 
 .form-signin {
