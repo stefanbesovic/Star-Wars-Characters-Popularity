@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" th:href="@{/css/main.css}" type="text/css" >
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+
+    <title>All Characters</title>
+</head>
+<body>
+<div th:insert="fragments/header :: menu"></div>
+<h1 class="mt-5 mb-5"> Every Character in StarWars ! </h1>
+<div class="container mt-5 mb-5">
+    <h2 class="mb-5">Wanna Vote for your favourite character? CLICK THE BUTTON BELOW !</h2>
+    <a th:href="@{/api/vote}"
+       class="btn btn-success btn-sm ">VOTE</a>
+</div>
+
+<div class="container mt-5">
+    <table class="table table-striped mt-5">
+        <thead>
+        <tr>
+            <th scope="col">Id</th>
+            <th scope="col">Name</th>
+            <th scope="col">Gender</th>
+            <th scope="col">Homeworld</th>
+            <th scope="col">Votes</th>
+            <th sec:authorize="hasAuthority('ADMIN')" scope="col">Actions</th>
+        </tr>
+        </thead>
+        <th:block th:each="character : ${characters}">
+            <tr>
+                <td th:text="${character.getId()}"></td>
+                <td th:text="${character.getName()}"></td>
+                <td th:text="${character.getGender()}"></td>
+                <td th:text="${character.getPlanet()}"></td>
+                <td th:text="${character.getVotersCount()}"></td>
+                <td sec:authorize="hasAuthority('ADMIN')">
+                    <a th:href="@{/api/character/delete(characterId=${character.getId()})}"
+                    class="btn btn-danger btn-sm" onclick="if (!(confirm('Are you sure that you want to delete this character?'))) return false">Delete</a>
+                </td>
+            </tr>
+        </th:block>
+    </table>
+</div>
+</body>
+</html>
