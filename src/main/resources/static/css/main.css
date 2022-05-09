@@ -5,6 +5,17 @@ body {
 }
 
 h1 {
+    text-align:center;
+}
+
+img {
+    max-width: 40px;
+    max-height: 40px;
+}
+.actions {
+    display: flex;
+    justify-content: start;
+    gap: 20px;
     text-align: center;
 }
 

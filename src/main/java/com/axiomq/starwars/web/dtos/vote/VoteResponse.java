@@ -1,10 +1,14 @@
 package com.axiomq.starwars.web.dtos.vote;
+import javax.persistence.Transient;
+
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.Base64;
 
 @Data
 @AllArgsConstructor
@@ -30,4 +34,5 @@ public class VoteResponse {
 
     @Schema(description = "Id of character")
     private Long characterId;
+
 }

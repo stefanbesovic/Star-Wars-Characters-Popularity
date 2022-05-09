@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 
+import java.io.IOException;
 import java.security.Principal;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -35,7 +36,7 @@ public class VoteController {
             @ApiResponse(responseCode = "500", description = "Internal Server Error")
     })
     @PostMapping
-    public VoteResponse saveVote(@RequestPart("icon") MultipartFile icon,
+    public VoteResponse saveVote(@RequestPart(value = "icon") MultipartFile icon,
                                  @Valid @RequestPart("request") VoteRequest voteRequest,
                                  Principal principal) {
         Vote vote = voteService.saveVote(VoteMapper.INSTANCE.fromReqDto(voteRequest), icon, voteRequest.getCharacterId(), principal);
@@ -75,7 +76,7 @@ public class VoteController {
     })
     @PutMapping("/{id}")
     public VoteResponse updateVote(@PathVariable("id") Long id,
-                                   @RequestPart("icon") MultipartFile icon,
+                                   @RequestPart(value = "icon", required = false) MultipartFile icon,
                                    @Valid @RequestPart("request") VoteUpdateDto voteUpdateDto,
                                    Principal principal) {
         Vote vote = voteService.updateVote(VoteMapper.INSTANCE.fromUpdDto(voteUpdateDto), icon, id, principal);

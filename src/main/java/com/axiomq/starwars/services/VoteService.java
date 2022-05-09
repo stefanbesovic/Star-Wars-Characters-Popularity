@@ -3,6 +3,7 @@ package com.axiomq.starwars.services;
 import com.axiomq.starwars.entities.Vote;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.security.Principal;
 import java.util.List;
 

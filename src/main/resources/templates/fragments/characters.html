@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div class="row" th:fragment="list" xmlns:th="http://www.thymeleaf.org">
+    <div th:each="character : ${characters}" class="col-sm-4">
+        <div class="card" style="width: 18rem;">
+            <img class="card-img-top" src="/icons/angry.png" alt="Card image cap">
+            <div class="card-body">
+                <h5 class="card-title" th:text="${character.name}">Card title</h5>
+                <p class="card-text" th:text="${character.planet}">Planet</p>
+                <p class="card-text" th:text="${character.gender}">Planet</p>
+                <p class="card-text" th:text="${character.votersCount}">Planet</p>
+                <a href="#" class="btn btn-primary">Vote</a>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
