@@ -5,7 +5,6 @@ import com.axiomq.starwars.enums.Planet;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 

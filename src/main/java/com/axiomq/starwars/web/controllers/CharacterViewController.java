@@ -29,15 +29,12 @@ public class CharacterViewController {
                 .collect(Collectors.toList());
 
         model.addAttribute("characters", characters);
-
         return new ModelAndView("characters");
     }
 
     @GetMapping("/delete")
     public ModelAndView deleteCharacter(@RequestParam("characterId") Long id) {
-
         characterService.deleteCharacter(id);
-
         return new ModelAndView("redirect:/api/character/all");
     }
 }

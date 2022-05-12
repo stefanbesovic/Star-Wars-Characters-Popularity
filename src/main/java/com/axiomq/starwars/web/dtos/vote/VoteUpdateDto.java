@@ -15,7 +15,6 @@ import javax.validation.constraints.Size;
 @Builder
 @Schema(description = "Vote update object")
 public class VoteUpdateDto {
-
     private Long id;
 
     @Schema(description = "User's rate of Character")

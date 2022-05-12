@@ -72,7 +72,6 @@ public class CharacterConverter {
 
         try {
             return Integer.parseInt(numberAsString);
-
         } catch (NumberFormatException e) {
             throw new NumberFormatException("Invalid number format");
         }

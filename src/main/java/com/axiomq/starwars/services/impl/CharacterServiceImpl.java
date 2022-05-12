@@ -37,7 +37,6 @@ public class CharacterServiceImpl implements CharacterService {
         log.info("Updating character with id: {}.", id);
 
         Character existing = getCharacterById(id);
-
         existing.setName(character.getName());
         existing.setFilms(character.getFilms());
         existing.setGender(character.getGender());
