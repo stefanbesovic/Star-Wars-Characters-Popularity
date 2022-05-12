@@ -7,7 +7,6 @@ import org.mapstruct.factory.Mappers;
 
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface CharacterMapper {
-
     CharacterMapper INSTANCE = Mappers.getMapper(CharacterMapper.class);
 
     CharacterDto toDto(Character character);

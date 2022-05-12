@@ -32,15 +32,12 @@ public class UserViewController {
                 .collect(Collectors.toList());
 
         model.addAttribute("users", users);
-
         return new ModelAndView("users");
     }
 
     @GetMapping("/delete")
     public ModelAndView deleteUser(@RequestParam("userId") Long id) {
-
         userService.deleteUser(id);
-
         return new ModelAndView("redirect:/admin/user");
     }
 }

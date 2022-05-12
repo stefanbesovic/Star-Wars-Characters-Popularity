@@ -13,8 +13,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.springframework.web.servlet.view.RedirectView;
 
 import javax.validation.Valid;
 import java.security.Principal;
@@ -49,13 +47,14 @@ public class VoteViewController {
     public ModelAndView saveVote(@RequestPart("icon") MultipartFile icon,
                                  @Valid @ModelAttribute VoteRequest voteRequest,
                                  Principal principal) {
-        Vote vote = voteService.saveVote(VoteMapper.INSTANCE.fromReqDto(voteRequest), icon, voteRequest.getCharacterId(), principal);
+        voteService.saveVote(VoteMapper.INSTANCE.fromReqDto(voteRequest), icon, voteRequest.getCharacterId(), principal);
         return new ModelAndView("redirect:/api/vote/all");
     }
 
     @GetMapping("/edit")
     public ModelAndView editVoteView(@RequestParam("voteId") Long id, Model model) {
         Vote vote = voteService.getVoteById(id);
+
         model.addAttribute("vote", vote);
         model.addAttribute("num", vote.getValue());
         return new ModelAndView("vote_edit");
@@ -65,18 +64,14 @@ public class VoteViewController {
     public ModelAndView editVote(@RequestPart(value = "icon", required = false) MultipartFile icon,
                                  @Valid @ModelAttribute("vote") VoteUpdateDto voteUpdateDto,
                                  Principal principal) {
-
-        Vote vote = voteService.updateVote(VoteMapper.INSTANCE.fromUpdDto(voteUpdateDto), icon, voteUpdateDto.getId(), principal);
-
+        voteService.updateVote(VoteMapper.INSTANCE.fromUpdDto(voteUpdateDto), icon, voteUpdateDto.getId(), principal);
         return new ModelAndView("redirect:/api/vote/all");
     }
 
     @GetMapping("/delete")
     public ModelAndView editVote(@RequestParam("voteId") Long id,
                                  Principal principal) {
-
         voteService.deleteVote(id, principal);
-
         return new ModelAndView("redirect:/api/vote/all");
     }
 }

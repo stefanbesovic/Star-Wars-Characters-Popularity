@@ -115,14 +115,12 @@ public class VoteServiceImpl implements VoteService {
     private Path saveFile(Vote vote, MultipartFile file) {
         log.info("Saving icon '{}' to vote with id: {}", file.getOriginalFilename(), vote.getId());
 
-        String fileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
+        String fileName = UUID.randomUUID() + "_" + file.getOriginalFilename();
         Path fullPath = Paths.get(uploadDirectory, fileName);
 
         try(InputStream inputStream = file.getInputStream()) {
-
             Files.copy(inputStream, fullPath, StandardCopyOption.REPLACE_EXISTING);
             return fullPath;
-
         } catch (IOException e) {
             throw new ImageUploadException(String.format("Can't upload file with name %s.", file.getOriginalFilename()));
         }
